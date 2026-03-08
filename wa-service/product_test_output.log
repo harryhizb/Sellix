@@ -1,0 +1,28 @@
+--- Starting Product Logic Tests ---
+
+1. Testing Empty Product List...
+(node:10160) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[RuleEngine] Routing state: MAIN_MENU, Input: "1"
+[RuleEngine] Products fetched for business 507f1f77bcf86cd799439011: 0
+[RuleEngine] Warning: No active products found for business 507f1f77bcf86cd799439011
+Response (Empty): We currently have no products listed. Please check back later!
+PASS: Handled empty product list correctly.
+
+2. Testing Populated Product List...
+[RuleEngine] Routing state: MAIN_MENU, Input: "1"
+[RuleEngine] Products fetched for business 507f1f77bcf86cd799439011: 1
+Response (Populated): Here are our top products:
+
+1. *Super Widget* - PKR 99.99
+
+Reply with the product number to view det
+PASS: Displayed product name correctly.
+
+3. Testing Product Selection...
+[RuleEngine] Routing state: BROWSING_PRODUCTS, Input: "1"
+Response (Selection): You selected *Super Widget*.
+Price: 99.99
+
+Type a quantity or 'Add' to add to cart.
+PASS: Transitioned to VIEWING_PRODUCT.

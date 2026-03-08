@@ -1,0 +1,4 @@
+src/app/dashboard/onboarding/page.tsx(38,15): error TS2552: Cannot find name 'Store'. Did you mean 'Storage'?
+src/app/dashboard/onboarding/page.tsx(49,15): error TS2304: Cannot find name 'Coffee'.
+src/app/dashboard/onboarding/page.tsx(60,15): error TS2304: Cannot find name 'Briefcase'.
+src/app/dashboard/onboarding/page.tsx(82,15): error TS2304: Cannot find name 'GraduationCap'.

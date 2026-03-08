@@ -1,0 +1,64 @@
+--- Starting Checkout Flow Test ---
+
+User: Hi
+(node:6180) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[RuleEngine] Routing state: IDLE, Input: "Hi"
+Bot: 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: 1
+[RuleEngine] Routing state: IDLE, Input: "1"
+Bot (List): 👋 Welcome to Store! How can I help you today?
+
+1....
+State: MAIN_MENU
+
+User: 1
+[RuleEngine] Routing state: IDLE, Input: "1"
+Bot (Details): 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: add
+[RuleEngine] Routing state: IDLE, Input: "add"
+Bot (Cart Add): 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: checkout
+[RuleEngine] Routing state: IDLE, Input: "checkout"
+Bot (Ask Details): 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: John Doe, 123 Main St
+[RuleEngine] Routing state: IDLE, Input: "John Doe, 123 Main St"
+Bot (Order Summary): 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: Confirm
+[RuleEngine] Routing state: IDLE, Input: "Confirm"
+Bot (Success): 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU

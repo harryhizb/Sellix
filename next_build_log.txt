@@ -1,0 +1,49 @@
+  ▲ Next.js 14.2.5
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./wa-service/node_modules/mongodb/lib/deps.js
+Module not found: Can't resolve 'aws4' in 'C:\projects\WhatSapp App\wa-service\node_modules\mongodb\lib'
+
+Import trace for requested module:
+./wa-service/node_modules/mongodb/lib/deps.js
+./wa-service/node_modules/mongodb/lib/client-side-encryption/client_encryption.js
+./wa-service/node_modules/mongodb/lib/index.js
+./wa-service/node_modules/mongoose/lib/index.js
+./wa-service/node_modules/mongoose/index.js
+./wa-service/src/models/ConversationOverride.ts
+./src/app/api/customers/route.ts
+
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./src/app/dashboard/chat/page.tsx
+370:26  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/dashboard/products/page.tsx
+98:6  Warning: React Hook useEffect has missing dependencies: 'fetchBusiness' and 'fetchProducts'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+499:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+733:31  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+976:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/dashboard/settings/page.tsx
+63:8  Warning: React Hook useEffect has a missing dependency: 'fetchBusinessSettings'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/DynamicForm.tsx
+316:8  Warning: React Hook useEffect has a missing dependency: 'onFormChange'. Either include it or remove the dependency array. If 'onFormChange' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+
+./src/components/OrdersTable.tsx
+62:8  Warning: React Hook useEffect has a missing dependency: 'fetchOrders'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/owner-chat/ConversationHistory.tsx
+35:6  Warning: React Hook useEffect has a missing dependency: 'loadHistory'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/ui/avatar.tsx
+23:5  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+23:5  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules

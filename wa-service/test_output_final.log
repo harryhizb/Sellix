@@ -1,0 +1,71 @@
+--- Starting Checkout Flow Test ---
+
+User: Hi
+(node:18508) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[RuleEngine] Routing state: IDLE, Input: "Hi"
+Bot: 👋 Welcome to Store! How can I help you today?
+
+1. Browse Products 🛍️
+2. Delivery Information 🚚
+3. Contact Support 📞
+State: MAIN_MENU
+
+User: 1
+[RuleEngine] Routing state: MAIN_MENU, Input: "1"
+Bot (List): Here are our top products:
+
+
+Reply with the produc...
+State: BROWSING_PRODUCTS
+
+User: 1
+[RuleEngine] Routing state: BROWSING_PRODUCTS, Input: "1"
+Bot (Details): You selected *Mock Product 1*.
+Price: 100
+
+Type a quantity or 'Add' to add to cart.
+State: VIEWING_PRODUCT
+
+User: add
+[RuleEngine] Routing state: VIEWING_PRODUCT, Input: "add"
+Bot (Cart Add): ✅ Added *Mock Product 1* to cart.
+
+Type 'checkout' to finish or 'menu' to browse more.
+State: CART_ACTIVE
+
+User: checkout
+[RuleEngine] Routing state: CART_ACTIVE, Input: "checkout"
+Bot (Ask Details): To complete your order, please provide your delivery details:
+
+Name:
+Address:
+City:
+
+(Type all in one message)
+State: COLLECTING_DETAILS
+
+User: John Doe, 123 Main St
+[RuleEngine] Routing state: COLLECTING_DETAILS, Input: "John Doe, 123 Main St"
+Bot (Order Summary): 📝 *Order Summary*
+
+• Mock Product 1 x1
+
+*Total: USD 100*
+
+📍 *Delivery To:*
+Customer
+John Doe, 123 Main St
+
+
+Type *Confirm* to place order, or *Cancel* to edit.
+State: CONFIRMING_ORDER
+
+User: Confirm
+[RuleEngine] Routing state: CONFIRMING_ORDER, Input: "Confirm"
+Bot (Success): 🎉 *Order Placed!* (ORD-802032)
+
+Thank you for shopping with Store. We will contact you shortly to confirm delivery.
+
+Type 'menu' to shop again.
+State: IDLE
