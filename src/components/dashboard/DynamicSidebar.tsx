@@ -7,6 +7,7 @@ import { getNavigation, type Capabilities } from '@/lib/dashboard-config';
 import { MessageSquare, Wifi, WifiOff, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 interface DynamicSidebarProps {
   capabilities: Capabilities;
@@ -96,13 +97,18 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
     <div className="flex flex-col h-full bg-slate-950">
       {/* Header with Logo */}
       <div className="p-5 border-b border-slate-800">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[#25D366] flex items-center justify-center text-white font-bold shadow-lg shadow-[#25D366]/20 group-hover:shadow-[#25D366]/30 transition-shadow">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-white">Sellix</h1>
-          </div>
+        <Link href="/dashboard" className="flex items-center gap-2.5 group">
+          <Image
+            src="/logo.png"
+            alt="Sellix Logo"
+            width={60}
+            height={56}
+            className="rounded-lg"
+          />
+
+          <span style={{ fontWeight: 900, letterSpacing: "-0.02em", fontSize: "3rem" }}>
+            Sellix
+          </span>
         </Link>
       </div>
 

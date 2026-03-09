@@ -11,6 +11,7 @@ import { CheckCircle2, Loader2, Mail, Lock, User, Building2, ArrowRight, Shield,
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useGoogleLogin } from "@react-oauth/google";
+import Image from "next/image";
 
 function getPasswordStrength(password: string): { strength: number; label: string; color: string } {
   let strength = 0;
@@ -137,10 +138,17 @@ export default function SignupPage() {
 
         <div className="relative z-10 flex flex-col justify-between p-12 xl:p-20 w-full">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center btn-primary">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
-            <span style={{ fontWeight: 700, letterSpacing: "-0.02em" }} className="text-xl text-white">Sellix</span>
+            <Image
+              src="/logo.png"
+              alt="Sellix Logo"
+              width={60}
+              height={56}
+              className="rounded-lg"
+            />
+
+            <span style={{ fontWeight: 900, letterSpacing: "-0.02em", fontSize: "3rem" }}>
+              Sellix
+            </span>
           </Link>
 
           <div className="space-y-8 max-w-lg">

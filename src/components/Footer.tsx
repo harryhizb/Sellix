@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { ArrowRight, Twitter, Linkedin, Github, MessageSquare, Zap } from "lucide-react";
+import Image from "next/image";
+
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -130,15 +132,22 @@ export default function Footer() {
             {/* Brand Column */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2.5 mb-5">
-                <div className="w-9 h-9 rounded-xl bg-[#25D366] flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-white" />
-                </div>
-                <h2
-                  style={{ fontWeight: 700, letterSpacing: "-0.02em" }}
-                  className="text-xl text-white"
-                >
-                  Sellix
-                </h2>
+
+                <Link href="/" className="flex items-center gap-2.5 group">
+                  <Image
+                    src="/logo.png"
+                    alt="Sellix Logo"
+                    width={36}
+                    height={36}
+                    className="rounded-lg"
+                  />
+
+                  <span style={{ fontWeight: 700, letterSpacing: "-0.02em", fontSize: "1.2rem" }}>
+                    Sellix
+                  </span>
+                </Link>
+
+
               </div>
               <p className="text-sm text-white/40 mb-8 leading-relaxed max-w-xs">
                 Turn WhatsApp into your 24/7 sales channel. AI handles orders, answers questions,
