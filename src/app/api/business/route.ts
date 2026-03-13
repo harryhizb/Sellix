@@ -42,21 +42,37 @@ export async function PUT(req: Request) {
         const user = await User.findById(decoded.userId);
         if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-        let updateData: any = {
-            name: body.name,
-            description: body.description,
-            contactPhone: body.contactPhone,
-            ownerPhone: body.ownerPhone,
-            address: body.address,
-            paymentInstructions: body.paymentInstructions,
-            tone: body.tone,
-            currency: body.currency,
-            templateType: body.templateType,
-            policies: body.policies,
-            settings: body.settings,
-            operatingHours: body.operatingHours,
-            onboardingComplete: body.onboardingComplete
-        };
+        let updateData: any = {};
+        if (body.name !== undefined) updateData.name = body.name;
+        if (body.description !== undefined) updateData.description = body.description;
+        if (body.contactPhone !== undefined) updateData.contactPhone = body.contactPhone;
+        if (body.ownerPhone !== undefined) updateData.ownerPhone = body.ownerPhone;
+        if (body.address !== undefined) updateData.address = body.address;
+        if (body.paymentInstructions !== undefined) updateData.paymentInstructions = body.paymentInstructions;
+        if (body.tone !== undefined) updateData.tone = body.tone;
+        if (body.currency !== undefined) updateData.currency = body.currency;
+        if (body.templateType !== undefined) updateData.templateType = body.templateType;
+        if (body.policies !== undefined) updateData.policies = body.policies;
+        if (body.settings !== undefined) updateData.settings = body.settings;
+        if (body.operatingHours !== undefined) updateData.operatingHours = body.operatingHours;
+        if (body.onboardingComplete !== undefined) updateData.onboardingComplete = body.onboardingComplete;
+
+        // Deep merge storefront object so it doesn't overwrite unrelated keys
+        if (body.storefront !== undefined) {
+            for (const [key, value] of Object.entries(body.storefront)) {
+                updateData[`storefront.${key}`] = value;
+            }
+        }
+
+        if (body.slug) {
+            const formattedSlug = body.slug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, '');
+            // Check if slug is taken by ANOTHER business
+            const existing = await Business.findOne({ slug: formattedSlug, _id: { $ne: user.businessId } });
+            if (existing) {
+                return NextResponse.json({ error: "Store link is already taken. Please choose another." }, { status: 400 });
+            }
+            updateData.slug = formattedSlug;
+        }
 
         if (body.features) {
             updateData.capabilities = {

@@ -100,6 +100,7 @@ export async function POST(req: NextRequest) {
             stockQuantity = 0,
             discountValue = 0,
             category = "",
+            categoryId,
             businessId,
             variants = [],
             tags = [],
@@ -133,6 +134,7 @@ export async function POST(req: NextRequest) {
             imageUrl: imageUrl || "",
             stockQuantity: Number(stockQuantity) || 0,
             category: category || business.category || "general",
+            categoryId: categoryId || null,
             variants: variants || [],
             tags: tags || [],
             isActive: true, // Always set to true as requested
@@ -200,6 +202,11 @@ export async function PUT(req: NextRequest) {
         
         // Always ensure isActive is true
         updateData.isActive = true;
+
+        // Preserve categoryId if provided (allow null to clear)
+        if ('categoryId' in updateData) {
+            updateData.categoryId = updateData.categoryId || null;
+        }
 
         // Handle discount
         if (updateData.discountValue && updateData.discountValue > 0) {

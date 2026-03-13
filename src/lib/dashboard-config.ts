@@ -12,6 +12,9 @@ import {
     UserCheck,
     BookOpen,
     Link2,
+    Store,
+    ExternalLink,
+    Tag,
 } from 'lucide-react';
 
 export interface Capabilities {
@@ -38,6 +41,8 @@ export function getNavigation(capabilities: Capabilities): NavItem[] {
     if (capabilities.supportsProducts || capabilities.supportsCart) {
         items.push({ label: 'Orders', href: '/dashboard/orders', icon: ShoppingBag });
         items.push({ label: 'Products', href: '/dashboard/products', icon: Package });
+        items.push({ label: 'Categories', href: '/dashboard/categories', icon: Tag });
+        items.push({ label: 'Storefront', href: '/dashboard/storefront', icon: Store });
     }
 
     // Service features

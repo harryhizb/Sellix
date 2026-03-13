@@ -25,7 +25,7 @@ const mockSession: SessionContext = {
     sessionId: 'test-session-refine',
     userId: 'user-refine-1',
     businessId: 'mock-business-id',
-    businessType: BusinessType.ECOMMERCE,
+
     conversationState: BotState.IDLE,
     language: 'en',
     cart: [],

@@ -77,7 +77,7 @@ export class RuleEngine {
         // Handle AWAITING_HUMAN_REASON state - capture reason and activate takeover
         if (session.conversationState === BotState.AWAITING_HUMAN_REASON) {
             const norm = cleanMessage.trim().toLowerCase();
-            
+
             // Allow user to cancel
             if (norm === 'menu' || norm === 'cancel') {
                 return this.finalize(session, {
@@ -86,7 +86,7 @@ export class RuleEngine {
                     updatedSession: session
                 });
             }
-            
+
             // Save reason and activate human takeover
             try {
                 await businessService.activateConversationOverride(
@@ -94,7 +94,7 @@ export class RuleEngine {
                     session.userId,
                     cleanMessage.trim() // Pass the reason
                 );
-                
+
                 return this.finalize(session, {
                     response:
                         `✅ *Connecting you to our team!*\n\n` +
@@ -143,8 +143,9 @@ export class RuleEngine {
         if (routerResult) return this.finalize(session, routerResult);
 
         // Step 5: Final fallback — show main menu
+        const storeUrl = aiContext?.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${aiContext.slug}` : undefined;
         return this.finalize(session, {
-            response: TemplateRegistry.mainMenu(aiContext?.name || 'Store', aiContext?.capabilities),
+            response: TemplateRegistry.mainMenu(aiContext?.name || 'Store', aiContext?.capabilities, storeUrl),
             newState: BotState.MAIN_MENU,
             updatedSession: session
         });
@@ -168,8 +169,9 @@ export class RuleEngine {
 
         // "menu" / "home" — always valid to reset to main menu
         if (input === 'menu' || input === 'home') {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
-                response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities),
+                response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,
                 updatedSession: session
             };

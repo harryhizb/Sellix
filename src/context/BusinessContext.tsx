@@ -52,12 +52,13 @@ export function BusinessProvider({ children }: { children: ReactNode }) {
 
         try {
             setIsLoading(true);
-            const res = await fetch(`/api/business/${user.businessId}`, {
+            const res = await fetch(`/api/business`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             if (res.ok) {
-                const data = await res.json();
+                const responseData = await res.json();
+                const data = responseData.business;
 
                 // If business document already has capabilities, use them
                 if (data.capabilities) {

@@ -148,9 +148,9 @@ export async function GET(req: NextRequest) {
         const total = await Feedback.countDocuments(query);
 
         // Get feedback with populated data
+        // Note: We don't populate customerId as it may not exist in all cases
         const feedbackList = await Feedback.find(query)
             .populate("businessId", "name category")
-            .populate("customerId", "name phone")
             .populate("orderId", "orderNumber totalAmount")
             .sort({ createdAt: -1 })
             .skip(skip)

@@ -22,6 +22,16 @@ export class CartEngine {
     // ──────────────────────────────────────────────────────────────────────────
 
     async handleBrowse(session: SessionContext, context: any): Promise<RuleEngineResponse> {
+        // 1. Check if business has categories
+        const categories = await productService.getCategories(session.businessId);
+        
+        if (categories && categories.length > 0) {
+            session.lastShownCategories = categories;
+            const response = TemplateRegistry.categoryList(categories);
+            return { response, newState: BotState.BROWSING_CATEGORIES, updatedSession: session };
+        }
+
+        // 2. Fallback to direct products view if no categories
         const products = await productService.getProducts(session.businessId, { limit: 10 });
         session.lastShownProducts = products;
 
@@ -29,6 +39,31 @@ export class CartEngine {
         const response = TemplateRegistry.productList(products, currency);
 
         return { response, newState: BotState.BROWSING_PRODUCTS, updatedSession: session };
+    }
+
+    async handleCategoryBrowsing(session: SessionContext, message: string, context: any): Promise<RuleEngineResponse> {
+        const input = normalizeInput(message);
+        if (input.includes('back')) {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            return { response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl), newState: BotState.MAIN_MENU, updatedSession: session };
+        }
+
+        const categoryNum = isListSelection(input);
+        if (categoryNum && session.lastShownCategories && session.lastShownCategories[categoryNum - 1]) {
+            const selectedCategory = session.lastShownCategories[categoryNum - 1];
+            
+            // Fetch products for this category
+            const products = await productService.getProductsByCategory(session.businessId, selectedCategory._id?.toString() || selectedCategory.id);
+            session.lastShownProducts = products;
+
+            const currency = context.settings?.currency || context.currency || 'USD';
+            const response = TemplateRegistry.productList(products, currency);
+
+            return { response, newState: BotState.BROWSING_PRODUCTS, updatedSession: session };
+        }
+
+        // Invalid choice
+        return this.handleBrowse(session, context);
     }
 
     async handleProductBrowsing(session: SessionContext, message: string, context: any): Promise<RuleEngineResponse> {
@@ -63,7 +98,10 @@ export class CartEngine {
         const product = session.meta?.focusingProduct;
 
         if (input.includes('back') || input === '2') return this.handleBrowse(session, context);
-        if (input === '3' || input === 'cmd_menu') return { response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities), newState: BotState.MAIN_MENU, updatedSession: session };
+        if (input === '3' || input === 'cmd_menu') {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            return { response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl), newState: BotState.MAIN_MENU, updatedSession: session };
+        }
 
         if (input.includes('add') || input.includes('buy') || input === '1' ||
             message.trim().toLowerCase().startsWith('cmd_add_cart')) {
@@ -275,10 +313,10 @@ export class CartEngine {
             return this.handleBrowse(session, context);
         }
 
-        // "3" → Main Menu
         if (input === '3' || input === 'cmd_menu') {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
-                response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities),
+                response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,
                 updatedSession: session
             };

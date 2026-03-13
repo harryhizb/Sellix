@@ -24,13 +24,20 @@ export class TemplateRegistry {
     // COMMONS & GLOBAL
     // ──────────────────────────────────────────────────────────────────────────
 
-    static greeting(businessName: string, capabilities?: any): BaileysMessage {
+    static greeting(businessName: string, capabilities?: any, storeUrl?: string): BaileysMessage {
         const supportsProducts = capabilities?.supportsProducts || capabilities?.supportsCart;
         const supportsServices = capabilities?.supportsServices || capabilities?.supportsBooking;
         const supportsInfo = capabilities?.supportsInformation;
 
         let menuText = `👋 *Welcome to ${businessName}!*\n\n`;
-        menuText += `We're here to help you. What would you like to do today?\n\n`;
+
+        if (storeUrl) {
+            menuText += `🛍️ *Shop Online:*\n${storeUrl}\n\n`;
+            menuText += `Or choose an option below:\n\n`;
+        } else {
+            menuText += `We're here to help you. What would you like to do today?\n\n`;
+        }
+
         menuText += `━━━━━━━━━━━━━━━━━━━━\n`;
         menuText += `📋 *MAIN MENU*\n`;
         menuText += `━━━━━━━━━━━━━━━━━━━━\n\n`;
@@ -69,9 +76,9 @@ export class TemplateRegistry {
         return { text: menuText };
     }
 
-    static mainMenu(businessName: string, capabilities?: any): BaileysMessage {
+    static mainMenu(businessName: string, capabilities?: any, storeUrl?: string): BaileysMessage {
         // Reuse the greeting template for consistency
-        return this.greeting(businessName, capabilities);
+        return this.greeting(businessName, capabilities, storeUrl);
     }
 
     static policies(context: any): BaileysMessage {
@@ -183,7 +190,25 @@ export class TemplateRegistry {
 
     // ──────────────────────────────────────────────────────────────────────────
     // E-COMMERCE / PRODUCTS
-    // ──────────────────────────────────────────────────────────────────────────
+    static categoryList(categories: Array<any>): BaileysMessage {
+        if (categories.length === 0) {
+            return { text: `📂 *Categories*\n\nNo categories available at the moment.\n\n_Type MENU to go back._` };
+        }
+
+        let text = `📂 *Shop by Category*\n\n`;
+        text += `━━━━━━━━━━━━━━━━━━━━\n`;
+        text += `Reply with a number to view products:\n\n`;
+
+        categories.forEach((c, idx) => {
+            text += `${idx + 1}️⃣ ${c.emoji ? c.emoji + ' ' : ''}${c.name}\n\n`;
+        });
+
+        text += `━━━━━━━━━━━━━━━━━━━━\n`;
+        text += `\n💡 *Tip:* Reply with a number (1-${categories.length}) to select a category\n`;
+        text += `_Type MENU to return to main menu._`;
+        
+        return { text };
+    }
 
     static productList(products: Array<any>, currency: string): BaileysMessage {
         if (products.length === 0) {

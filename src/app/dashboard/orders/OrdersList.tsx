@@ -29,8 +29,9 @@ interface OrderWithSummary extends Order { summary?: string; }
 interface Order {
   _id: string; orderNumber?: string; type?: 'order' | 'booking';
   customerId?: { name?: string; phone?: string; _id: string; };
-  businessId: string; status: string; totalAmount: number; currency: string;
-  createdAt: string; items: Array<{ name: string; quantity: number; price: number; color?: string; size?: string; }>;
+  customerInfo?: { name?: string; phone?: string; };
+  businessId: string; status: string; totalAmount: number; currency: string; source?: string;
+  createdAt: string; items: Array<{ name: string; quantity: number; price: number; color?: string; size?: string; attributes?: any }>;
   deliveryDetails?: { address: string; contact: string; city?: string; instructions?: string; };
   bookingDetails?: { preferredDate?: string; preferredTime?: string; guestCount?: number; };
   deliveryTracking?: { trackingNumber: string; carrier: string; }; isPaused?: boolean;
@@ -72,58 +73,111 @@ const OrderCard = React.memo(({
   onReject: (order: Order) => void;
   onViewSummary: (id: string) => void;
 }) => {
+  const customerName = order.customerInfo?.name || order.customerId?.name || "Guest";
+  const customerPhone = order.customerInfo?.phone || order.customerId?.phone || order.deliveryDetails?.contact || "No Phone Info";
+  const isWebOrder = order.source === "web";
+
   return (
-    <div className="glass rounded-2xl p-6 card-hover mb-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-lg font-bold text-white font-mono">#{order.orderNumber || order._id.slice(-6)}</span>
+    <div className="glass rounded-2xl p-6 card-hover mb-6 relative overflow-hidden shadow-lg border border-slate-800/60">
+      {/* Decorative top border based on status */}
+      <div className={cn(
+        "absolute top-0 left-0 w-full h-1",
+        order.status === "PENDING" ? "bg-amber-500" :
+        order.status === "CONFIRMED" ? "bg-emerald-500" :
+        order.status === "DELIVERED" ? "bg-purple-500" : "bg-white/10"
+      )} />
+
+      <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
+        <div className="space-y-3 flex-1">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-xl font-bold text-white font-mono">#{order.orderNumber || order._id.slice(-6)}</span>
             <StatusBadge status={order.status} statusConfig={statusConfig} />
+            {isWebOrder ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-500/20 text-blue-400 uppercase tracking-widest border border-blue-500/30">
+                🌐 Web Store
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-400 uppercase tracking-widest border border-emerald-500/30">
+                💬 WhatsApp
+              </span>
+            )}
           </div>
-          <div className="flex items-center gap-2 text-sm text-white/50">
-            <span className="text-white/70">{order.customerId?.name || "Customer"}</span>
-            <span>•</span>
-            <span>{order.customerId?.phone}</span>
-            <span>•</span>
-            <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/[0.02] p-3 rounded-xl border border-white/[0.05]">
+            <div>
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Customer Details</p>
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-white/90">{customerName}</span>
+                <span className="text-white/30">•</span>
+                <span className="text-white/70 font-mono text-sm">{customerPhone}</span>
+              </div>
+            </div>
+            
+            <div className="sm:text-right">
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Order Date</p>
+              <span className="text-white/70 text-sm">{new Date(order.createdAt).toLocaleString()}</span>
+            </div>
           </div>
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-white font-mono">{order.currency} {order.totalAmount}</p>
-          <p className="text-xs text-white/40">{order.items.length} items</p>
+
+        <div className="md:text-right w-full md:w-auto bg-white/[0.03] p-4 rounded-xl border border-white/[0.06] flex md:flex-col justify-between items-center md:items-end">
+          <div>
+            <p className="text-xs text-white/40 uppercase tracking-wider mb-1 md:text-right">Total Amount</p>
+            <p className="text-3xl font-bold text-white font-mono tracking-tight text-emerald-400">
+              <span className="text-sm text-emerald-500/70 mr-1">{order.currency}</span>
+              {order.totalAmount.toLocaleString()}
+            </p>
+          </div>
+          <p className="text-xs font-medium text-white/50 mt-2 bg-white/5 px-2 py-1 rounded-md">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
 
       <div className="space-y-2 mb-6">
-        {order.items.map((item, idx) => (
-          <div key={idx} className="flex justify-between items-center p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-medium text-white/70">
-                {item.quantity}x
+        <p className="text-xs text-white/40 uppercase tracking-wider mb-2 font-semibold">Order Items</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {order.items.map((item, idx) => {
+            const variantText = item.attributes?.variant || [item.color, item.size].filter(Boolean).join(", ");
+            return (
+              <div key={idx} className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="h-8 w-8 shrink-0 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-400">
+                    {item.quantity}x
+                  </div>
+                  <div className="min-w-0 truncate">
+                    <span className="text-sm font-medium text-white/90 truncate block">{item.name}</span>
+                    {variantText && (
+                      <p className="text-[11px] text-white/50 truncate">Variant: {variantText}</p>
+                    )}
+                  </div>
+                </div>
+                <span className="text-sm font-bold text-white/80 font-mono shrink-0">
+                  {order.currency} {(item.price * item.quantity).toLocaleString()}
+                </span>
               </div>
-              <div>
-                <span className="text-sm text-white">{item.name}</span>
-                {(item.color || item.size) && (
-                  <p className="text-xs text-white/40">{[item.color, item.size].filter(Boolean).join(", ")}</p>
-                )}
-              </div>
-            </div>
-            <span className="text-sm font-medium text-white/70 font-mono">{order.currency} {item.price * item.quantity}</span>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
 
       {order.deliveryDetails && (
-        <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-6">
-          <p className="text-xs text-white/40 mb-2 uppercase tracking-wider">Delivery Address</p>
-          <p className="text-sm text-white/70">{order.deliveryDetails.address}</p>
-          <p className="text-sm text-white/50">{order.deliveryDetails.contact}</p>
+        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/5 to-transparent border border-blue-500/10 mb-6 flex items-start gap-3">
+          <Truck className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-[10px] text-blue-400/70 uppercase tracking-wider font-bold mb-1">Delivery Info</p>
+            <p className="text-sm text-white/80 leading-relaxed">
+              {order.deliveryDetails.address}
+              {order.deliveryDetails.city ? `, ${order.deliveryDetails.city}` : ''}
+            </p>
+            {order.deliveryDetails.instructions && (
+              <p className="text-xs text-white/50 mt-1 italic">Note: {order.deliveryDetails.instructions}</p>
+            )}
+          </div>
         </div>
       )}
 
-      <div className="flex flex-wrap gap-3 justify-end">
-        <Button size="sm" variant="outline" onClick={() => onViewSummary(order._id)} className="border-white/[0.08] text-white/70 hover:bg-white/5 hover:text-white rounded-full">
-          <Eye className="w-4 h-4 mr-2" /> View
+      <div className="flex flex-wrap gap-2 justify-end pt-4 border-t border-white/[0.05]">
+        <Button size="sm" variant="outline" onClick={() => onViewSummary(order._id)} className="h-9 px-4 border-white/[0.1] text-white/70 hover:bg-white/10 hover:text-white rounded-lg transition-all">
+          <Eye className="w-4 h-4 mr-2" /> View Details
         </Button>
 
         {order.status?.toUpperCase() === "PENDING" && (
@@ -131,17 +185,17 @@ const OrderCard = React.memo(({
             <Button
               size="sm"
               onClick={() => onApprove(order._id)}
-              className="bg-[#25D366] hover:bg-[#1ea855] text-white rounded-full"
+              className="h-9 px-4 bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg shadow-lg shadow-emerald-500/20 transition-all font-semibold"
             >
-              <CheckCircle className="w-4 h-4 mr-2" /> Confirm
+              <CheckCircle className="w-4 h-4 mr-2" /> Accept Order
             </Button>
             <Button
               size="sm"
               variant="outline"
               onClick={() => onReject(order)}
-              className="border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-full"
+              className="h-9 px-4 border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 rounded-lg transition-all"
             >
-              <XCircle className="w-4 h-4 mr-2" /> Cancel
+              <XCircle className="w-4 h-4 mr-2" /> Reject
             </Button>
           </>
         )}
@@ -151,7 +205,7 @@ const OrderCard = React.memo(({
             size="sm"
             variant="outline"
             onClick={() => onReject(order)}
-            className="border-red-500/30 text-red-400 hover:bg-red-500/10 rounded-full"
+            className="h-9 px-4 border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 rounded-lg transition-all"
           >
             <XCircle className="w-4 h-4 mr-2" /> Cancel Order
           </Button>
@@ -200,6 +254,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
       return res.json();
     },
     enabled: !!token,
+    refetchInterval: 15000, // Poll every 15 seconds to auto-refresh new orders
     initialData: () => {
       if (fetchOrdersParams.includes(`page=${initialPagination.page}`)) {
         return { orders: initialOrders, statistics: initialStatistics, pagination: initialPagination };
@@ -402,6 +457,9 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
               return (
                 <div
                   key={virtualRow.key}
+                  className="pb-6" // Added padding to create spacing between virtualized cards
+                  ref={virtualizer.measureElement}
+                  data-index={virtualRow.index}
                   style={{
                     position: 'absolute',
                     top: 0,

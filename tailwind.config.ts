@@ -189,7 +189,8 @@ const config: Config = {
         "4xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em" }],
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-jakarta)", "Plus Jakarta Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["var(--font-outfit)", "Outfit", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       spacing: {
         '18': '4.5rem',

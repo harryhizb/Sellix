@@ -17,8 +17,9 @@ export class InstituteEngine {
     async handleCourseBrowsing(session: SessionContext, message: string, context: any): Promise<RuleEngineResponse> {
         const input = normalizeInput(message);
         if (input.includes('back')) {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
-                response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities),
+                response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,
                 updatedSession: session
             };
@@ -50,8 +51,9 @@ export class InstituteEngine {
         }
 
         if (input === '3' || input.includes('menu')) {
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
-                response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities),
+                response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,
                 updatedSession: session
             };

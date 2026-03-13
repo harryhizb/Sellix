@@ -256,7 +256,7 @@ orderSchema.virtual('ageInHours').get(function () {
 });
 
 // Pre-save middleware to generate order number
-orderSchema.pre('save', async function (next: any) {
+orderSchema.pre('save', async function () {
   if (this.isNew && !this.orderNumber) {
     const year = new Date().getFullYear();
     const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
@@ -307,8 +307,7 @@ orderSchema.pre('save', async function (next: any) {
         break;
     }
   }
-
-  next();
+  // async hook — no next() call needed
 });
 
 // Instance method to generate professional order summary

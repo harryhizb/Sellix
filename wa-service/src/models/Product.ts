@@ -11,6 +11,7 @@ export interface IProduct extends Document {
     inStock: boolean;
     stockQuantity: number;
     category?: string;
+    categoryId?: mongoose.Types.ObjectId;
     attributes?: Record<string, any>;
     variants?: Array<{
         name: string;
@@ -42,6 +43,7 @@ const ProductSchema = new Schema<IProduct>(
         inStock: { type: Boolean, default: true },
         stockQuantity: { type: Number, default: 0 },
         category: { type: String },
+        categoryId: { type: Schema.Types.ObjectId, ref: "Category", default: null },
         attributes: { type: Schema.Types.Mixed, default: {} },
         variants: [{ name: String, price: Number, stock: { type: Number, default: 0 }, sku: String, attributes: Schema.Types.Mixed }],
         discount: { type: { type: String, enum: ["percentage", "fixed"] }, value: Number, validUntil: Date },
@@ -51,5 +53,6 @@ const ProductSchema = new Schema<IProduct>(
     { timestamps: true }
 );
 
-export const Product: Model<IProduct> =
-    mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);
+// Delete the model from the cache to avoid HMR schema caching issues in development
+delete mongoose.models.Product;
+export const Product: Model<IProduct> = mongoose.model<IProduct>("Product", ProductSchema);

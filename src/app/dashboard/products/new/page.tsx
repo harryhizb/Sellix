@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ export default function NewProductPage() {
     description: "",
     inStock: true,
     category: "",
+    categoryId: "",
     imageUrl: "",
     images: [] as { publicId: string; secureUrl: string }[],
     discount: "", // Keep as string for input, convert later
@@ -45,6 +46,25 @@ export default function NewProductPage() {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [variants, setVariants] = useState<Variant[]>([]);
+  const [categories, setCategories] = useState<{_id: string, name: string}[]>([]);
+
+  // Fetch categories
+  useEffect(() => {
+    if (token) {
+      fetch("/api/categories", { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => res.json())
+        .then(data => {
+          if (data.categories) {
+            setCategories(data.categories);
+            // Default select the first category if none is selected
+            if (data.categories.length > 0 && !formData.categoryId) {
+              setFormData(prev => ({ ...prev, categoryId: data.categories[0]._id, category: data.categories[0].name }));
+            }
+          }
+        })
+        .catch(console.error);
+    }
+  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Generate variants when colors or sizes change
   const generateVariants = () => {
@@ -155,7 +175,8 @@ export default function NewProductPage() {
       inStock: formData.inStock,
       imageUrl: formData.imageUrl,
       images: formData.images.length > 0 ? formData.images : undefined,
-      category: formData.category,
+      categoryId: (formData as any).categoryId || null,
+      category: formData.category, // Send name for fallback in old fields
       businessId: user.businessId,
       currency: "PKR",
       attributes: {
@@ -258,13 +279,40 @@ export default function NewProductPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-white/80">Category</Label>
-              <Input
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                placeholder="e.g., Clothing"
-                className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 focus:border-[#25D366]/50 rounded-xl h-11"
-              />
+              <Label className="text-white/80 flex justify-between">
+                Category
+                <Link href="/dashboard/categories" className="text-xs text-[#25D366] hover:underline">Manage</Link>
+              </Label>
+              {categories.length > 0 ? (
+                <select
+                  value={(formData as any).categoryId || ""}
+                  onChange={(e) => {
+                    const selectedCat = categories.find(c => c._id === e.target.value);
+                    setFormData({ 
+                      ...formData, 
+                      categoryId: e.target.value,
+                      category: selectedCat ? selectedCat.name : ""
+                    } as any);
+                  }}
+                  className="w-full bg-white/[0.04] border-white/[0.08] text-white focus:border-[#25D366]/50 rounded-xl h-11 px-3 appearance-none"
+                >
+                  <option value="" disabled>Select a category</option>
+                  {categories.map(c => (
+                    <option key={c._id} value={c._id} className="bg-[#080C10]">{c.name}</option>
+                  ))}
+                </select>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <Input
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    placeholder="e.g., Clothing... (Create via Categories tab)"
+                    className="bg-white/[0.04] border-white/[0.08] text-white/50 placeholder:text-white/30 focus:border-[#25D366]/50 rounded-xl h-11"
+                    disabled
+                  />
+                  <p className="text-xs text-amber-400">Please create categories first in the Categories tab.</p>
+                </div>
+              )}
             </div>
           </div>
 

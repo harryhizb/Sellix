@@ -29,7 +29,7 @@ const mockSession: SessionContext = {
     sessionId: 'sess-prod-test',
     userId: 'user-1',
     businessId: MOCK_BIZ_ID,
-    businessType: BusinessType.ECOMMERCE,
+
     conversationState: BotState.MAIN_MENU,
     lastActiveAt: Date.now(),
     language: 'en',

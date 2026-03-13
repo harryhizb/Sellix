@@ -223,8 +223,9 @@ export class FlowRouter {
           JSON.stringify(context.policies, null, 2),
         );
         if (msgLower === "menu" || msgLower.includes("back")) {
+          const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
           return {
-            response: TemplateRegistry.mainMenu(context.name || "Menu", caps),
+            response: TemplateRegistry.mainMenu(context.name || "Menu", caps, storeUrl),
             newState: BotState.MAIN_MENU,
             updatedSession: session,
           };
@@ -284,6 +285,9 @@ export class FlowRouter {
           };
         }
       }
+
+      case BotState.BROWSING_CATEGORIES:
+        return cartEngine.handleCategoryBrowsing(session, message, context);
 
       case BotState.BROWSING_PRODUCTS:
         if (caps.supportsInformation) {

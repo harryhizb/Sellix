@@ -1,4 +1,5 @@
 import { Product, IProduct } from "../models/Product";
+import { Category } from "../models/Category";
 import NodeCache from "node-cache";
 import { Service, IService } from "../models/Service";
 
@@ -101,6 +102,45 @@ export class ProductService {
     }
 
     /**
+     * Get categories for a business.
+     */
+    async getCategories(businessId: string): Promise<any[]> {
+        const cacheKey = `categories:${businessId}`;
+        const cached = productCache.get<any[]>(cacheKey);
+        if (cached) return cached;
+
+        try {
+            const categories = await Category.find({ businessId }).lean().exec();
+            productCache.set(cacheKey, categories);
+            return categories;
+        } catch (error) {
+            console.error(`[ProductService] Error fetching categories:`, error);
+            return [];
+        }
+    }
+
+    /**
+     * Get products filtered by category ID.
+     */
+    async getProductsByCategory(businessId: string, categoryId: string, limit: number = 20): Promise<IProduct[]> {
+        const cacheKey = `products_by_cat:${businessId}:${categoryId}:${limit}`;
+        const cached = productCache.get<IProduct[]>(cacheKey);
+        if (cached) return cached;
+
+        try {
+            const products = await Product.find({ businessId, categoryId, isActive: true })
+                .limit(limit)
+                .lean()
+                .exec() as any[];
+            productCache.set(cacheKey, products);
+            return products;
+        } catch (error) {
+            console.error(`[ProductService] Error fetching products for category:`, error);
+            return [];
+        }
+    }
+
+    /**
      * Get specific product details by ID (mostly for internal use or exact match).
      */
     async getProductById(productId: string): Promise<IProduct | null> {
@@ -127,7 +167,12 @@ export class ProductService {
     invalidateBusinessCache(businessId: string): void {
         const keys = productCache.keys();
         keys.forEach(key => {
-            if (key.startsWith(`products:${businessId}`) || key.startsWith(`search:${businessId}`)) {
+            if (
+                key.startsWith(`products:${businessId}`) || 
+                key.startsWith(`search:${businessId}`) ||
+                key.startsWith(`categories:${businessId}`) ||
+                key.startsWith(`products_by_cat:${businessId}`)
+            ) {
                 productCache.del(key);
             }
         });

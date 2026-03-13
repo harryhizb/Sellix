@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 interface BusinessSettings {
     _id?: string;
     name: string;
+    slug?: string;
     description?: string;
     address?: string;
     contactPhone?: string;
@@ -41,6 +42,7 @@ export default function SettingsPage() {
 
     const [business, setBusiness] = useState<BusinessSettings>({
         name: "",
+        slug: "",
         address: "",
         contactPhone: "",
         category: "ecommerce",
@@ -135,7 +137,7 @@ export default function SettingsPage() {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || "Failed to update settings");
+                throw new Error(errorData.error || errorData.message || "Failed to update settings");
             }
 
             const data = await res.json();
@@ -236,6 +238,21 @@ export default function SettingsPage() {
                             />
                         </div>
                         <div className="space-y-2">
+                            <Label className="text-white/70">Store Link (Slug)</Label>
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 text-sm">
+                                    sellix.com/store/
+                                </span>
+                                <Input
+                                    value={business.slug || ""}
+                                    onChange={e => setBusiness({ ...business, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, "") })}
+                                    placeholder="my-store"
+                                    className="bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 focus:border-[#25D366]/50 rounded-xl h-11 pl-28"
+                                />
+                            </div>
+                            <p className="text-xs text-white/40 mt-1">Customers will visit this link to order online.</p>
+                        </div>
+                        <div className="space-y-2 col-span-full">
                             <Label className="text-white/70">Public Contact Phone</Label>
                             <Input
                                 value={business.contactPhone || ""}

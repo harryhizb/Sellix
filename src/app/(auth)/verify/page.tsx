@@ -85,8 +85,8 @@ function VerifyContent() {
                 <div className="glass-dark rounded-3xl p-8 relative overflow-hidden">
                     <div className="shimmer absolute inset-0 rounded-3xl pointer-events-none" />
                     <div className="relative z-10 text-center">
-                        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/20 flex items-center justify-center">
-                            <Mail className="w-8 h-8 text-[#25D366]" />
+                        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-[#22C55E]/10 border border-[#22C55E]/20 flex items-center justify-center">
+                            <Mail className="w-8 h-8 text-[#22C55E]" />
                         </div>
 
                         <div className="mb-8">
@@ -94,7 +94,7 @@ function VerifyContent() {
                                 Check your email
                             </h2>
                             {devOtp && (
-                                <div className="bg-[#25D366]/10 text-[#25D366] text-xs font-semibold px-2 py-1 rounded w-fit mx-auto mb-2 border border-[#25D366]/20">
+                                <div className="bg-[#22C55E]/10 text-[#22C55E] text-xs font-semibold px-2 py-1 rounded w-fit mx-auto mb-2 border border-[#22C55E]/20">
                                     DEV MODE: OTP AUTO-FILLED
                                 </div>
                             )}
@@ -113,7 +113,7 @@ function VerifyContent() {
                                     id="code"
                                     type="text"
                                     placeholder="123456"
-                                    className="h-14 text-center text-2xl tracking-[0.5em] font-mono bg-white/5 border-white/10 text-white placeholder:text-white/20 rounded-xl focus:ring-2 focus:ring-[#25D366]/50 focus:border-[#25D366] transition-all"
+                                    className="h-14 text-center text-2xl tracking-[0.5em] font-mono bg-white/5 border-white/10 text-white placeholder:text-white/20 rounded-xl focus:ring-2 focus:ring-[#22C55E]/50 focus:border-[#22C55E] transition-all"
                                     value={code}
                                     onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
                                     required
@@ -143,7 +143,7 @@ function VerifyContent() {
                         <div className="mt-6 text-sm">
                             <p className="text-white/40">
                                 Didn't receive the code?{" "}
-                                <button className="text-[#25D366] hover:text-[#1ea855] font-medium transition-colors">
+                                <button className="text-[#22C55E] hover:text-[#1ea855] font-medium transition-colors">
                                     Resend
                                 </button>
                             </p>
@@ -163,18 +163,18 @@ function VerifyContent() {
 
 export default function VerifyPage() {
     return (
-        <div style={{ background: "#080C10" }} className="min-h-screen text-white flex font-['Sora','DM_Sans',sans-serif]">
+        <div style={{ background: "#08070D" }} className="min-h-screen text-white flex font-[var(--font-jakarta)]">
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+        
         .glass-dark { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(24px); }
-        .btn-primary { background: linear-gradient(135deg, #25D366 0%, #1aab52 100%); transition: all 0.25s ease; }
-        .btn-primary:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
+        .btn-primary { background: #22C55E; color: #08070D; font-family: var(--font-outfit); font-weight: 800; border-radius: 999px; transition: transform 0.25s, box-shadow 0.25s; }
+        .btn-primary:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(34,197,94,0.4); }
         .shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); background-size: 200% 100%; animation: shimmer 3s linear infinite; }
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
       `}</style>
 
             <div className="w-full flex">
-                <Suspense fallback={<div className="flex-1 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#25D366]" /></div>}>
+                <Suspense fallback={<div className="flex-1 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#22C55E]" /></div>}>
                     <VerifyContent />
                 </Suspense>
             </div>

@@ -286,12 +286,12 @@ export default function AdminFeedbackPage() {
             {/* Message Type Filter */}
             <div className="w-[200px]">
               <Label className="text-white/70 mb-2 block">Message Type</Label>
-              <Select value={messageTypeFilter} onValueChange={setMessageTypeFilter}>
+              <Select value={messageTypeFilter || "all"} onValueChange={(value) => setMessageTypeFilter(value === "all" ? "" : value)}>
                 <SelectTrigger className="bg-white/[0.02] border-white/[0.06] text-white">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="feedback">Feedback</SelectItem>
                   <SelectItem value="support">Support</SelectItem>
                   <SelectItem value="bug">Bug Report</SelectItem>
@@ -303,12 +303,12 @@ export default function AdminFeedbackPage() {
             {/* Status Filter */}
             <div className="w-[200px]">
               <Label className="text-white/70 mb-2 block">Status</Label>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter || "all"} onValueChange={(value) => setStatusFilter(value === "all" ? "" : value)}>
                 <SelectTrigger className="bg-white/[0.02] border-white/[0.06] text-white">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Statuses</SelectItem>
+                  <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
                   <SelectItem value="reviewed">Reviewed</SelectItem>
                   <SelectItem value="resolved">Resolved</SelectItem>

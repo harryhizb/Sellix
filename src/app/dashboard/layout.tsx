@@ -10,13 +10,6 @@ import { LogOut, Menu, MessageCircle, ChevronDown, Wifi, WifiOff, LifeBuoy } fro
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export default function DashboardLayout({
   children,
@@ -100,9 +93,9 @@ function DashboardLayoutContent({
   );
 
   return (
-    <div 
+    <div
       className="flex h-screen overflow-hidden"
-      style={{ 
+      style={{
         fontFamily: "var(--font-sora), var(--font-dm-sans), sans-serif",
         background: "#080C10"
       }}
@@ -178,15 +171,15 @@ function DashboardLayoutContent({
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Grid Background */}
         <div className="absolute inset-0 grid-bg pointer-events-none opacity-50" />
-        
+
         {/* Topbar */}
         <header className="h-16 glass border-b border-white/[0.06] flex items-center justify-between px-6 shrink-0 relative z-10">
           {/* Left - Mobile Menu & Breadcrumb */}
           <div className="flex items-center gap-4">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="icon"
                   className="md:hidden text-white/60 hover:text-white hover:bg-white/10"
                 >
@@ -197,12 +190,12 @@ function DashboardLayoutContent({
                 <SidebarContent />
               </SheetContent>
             </Sheet>
-            
+
             {/* Connection Status */}
             <div className={cn(
               "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium",
-              isConnected 
-                ? "tag-pill text-[#25D366]" 
+              isConnected
+                ? "tag-pill text-[#25D366]"
                 : "bg-red-500/10 text-red-400 border border-red-500/20"
             )}>
               {isConnected ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
@@ -214,8 +207,8 @@ function DashboardLayoutContent({
           <div className="flex items-center gap-3">
             {/* Support/Feedback Button */}
             <Link href="/dashboard/support">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 className="relative text-white/60 hover:text-white hover:bg-white/10"
                 title="Support & Feedback"
@@ -224,34 +217,43 @@ function DashboardLayoutContent({
               </Button>
             </Link>
 
-            {/* Profile Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/10"
+            {/* Profile Sheet (replaces dropdown) */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#25D366] to-emerald-600 flex items-center justify-center text-white font-semibold text-sm green-glow">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#25D366] to-emerald-600 flex items-center justify-center text-white font-semibold text-sm green-glow group-hover:scale-105 transition-transform">
                     {businessName?.charAt(0).toUpperCase() || "B"}
                   </div>
                   <span className="hidden sm:inline font-medium">{businessName}</span>
-                  <ChevronDown className="w-4 h-4 text-white/40" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 glass-dark border-white/[0.06]">
-                <div className="px-3 py-2 border-b border-white/[0.06]">
-                  <p className="text-sm font-medium text-white">{businessName}</p>
-                  <p className="text-xs text-white/50">Free Plan</p>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80 glass-dark border-white/[0.06] p-0">
+                <div className="p-6 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#25D366] to-emerald-600 flex items-center justify-center text-white font-bold text-xl green-glow">
+                      {businessName?.charAt(0).toUpperCase() || "B"}
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold">{businessName}</h3>
+                      <p className="text-sm text-white/50">Free Plan</p>
+                    </div>
+                  </div>
                 </div>
-                <DropdownMenuSeparator className="bg-white/[0.06]" />
-                <DropdownMenuItem 
-                  onClick={onLogout}
-                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer"
-                >
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <div className="p-4">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-white/50 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
+                    onClick={onLogout}
+                  >
+                    <LogOut className="w-5 h-5 mr-3" />
+                    Logout
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </header>
 

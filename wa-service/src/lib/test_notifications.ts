@@ -27,7 +27,7 @@ const mockSession: SessionContext = {
     sessionId: 'sess-notify-1',
     userId: 'user-cust-1', // Customer phone
     businessId: 'biz-1',
-    businessType: BusinessType.ECOMMERCE,
+
     conversationState: BotState.IDLE,
     language: 'en',
     cart: [{ productId: 'p1', name: 'Test Widget', qty: 2, unitPrice: 50 }],

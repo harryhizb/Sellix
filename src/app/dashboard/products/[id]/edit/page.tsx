@@ -17,6 +17,7 @@ import {
   Minus,
   ArrowLeft
 } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useProductStore } from "@/stores/productStore";
 
@@ -48,10 +49,23 @@ export default function EditProductPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState<{_id: string, name: string}[]>([]);
 
   useEffect(() => {
     fetchProduct();
+    fetchCategories();
   }, []);
+
+  async function fetchCategories() {
+    if (!token) return;
+    try {
+      const res = await fetch("/api/categories", { headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json();
+      if (data.categories) setCategories(data.categories);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  }
 
   async function fetchProduct() {
     try {
@@ -165,12 +179,40 @@ export default function EditProductPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">Category</label>
-                <Input
-                  value={product.category}
-                  onChange={(e) => handleChange('category', e.target.value)}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30"
-                />
+                <label className="text-sm font-medium text-white/70 mb-2 flex justify-between">
+                  Category
+                  <Link href="/dashboard/categories" className="text-xs text-[#25D366] hover:underline">Manage</Link>
+                </label>
+                {categories.length > 0 ? (
+                  <select
+                    value={(product as any).categoryId || ""}
+                    onChange={(e) => {
+                      const selectedCat = categories.find(c => c._id === e.target.value);
+                      setProduct({ 
+                        ...product, 
+                        categoryId: e.target.value,
+                        category: selectedCat ? selectedCat.name : ""
+                      } as any);
+                    }}
+                    className="w-full bg-white/5 border border-white/10 text-white rounded-lg h-10 px-3 appearance-none focus:outline-none focus:border-[#25D366]/50"
+                  >
+                    <option value="" disabled>Select a category</option>
+                    {categories.map(c => (
+                      <option key={c._id} value={c._id} className="bg-[#080C10]">{c.name}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Input
+                      value={product.category || ""}
+                      onChange={(e) => handleChange('category', e.target.value)}
+                      placeholder="e.g., Clothing... (Create via Categories tab)"
+                      className="bg-white/5 border-white/10 text-white/50 placeholder:text-white/30"
+                      disabled
+                    />
+                    <p className="text-xs text-amber-400">Please create categories first in the Categories tab.</p>
+                  </div>
+                )}
               </div>
 
               <div>

@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, 
@@ -169,25 +171,20 @@ export default function AdminLayout({
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}>
         {/* Logo */}
-        <div className="h-20 flex items-center px-6 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#25D366] to-emerald-600 flex items-center justify-center">
-              <Activity className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-white">Sellix</h1>
-              <p className="text-xs text-white/50">Super Admin</p>
-            </div>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden ml-auto text-white/60"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
+        <div className="h-20 flex items-center px-6 border-b border-white/[0.06]">  <Link href="/" className="flex items-center gap-2.5 group">
+            <Image
+              src="/logo.png"
+              alt="Sellix Logo"
+              width={60}
+              height={56}
+              className="rounded-lg"
+            />
+
+            <span style={{ fontWeight: 900, letterSpacing: "-0.02em", fontSize: "3rem" }}>
+              Sellix
+            </span>
+          </Link></div>
+      
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-6">

@@ -12,6 +12,7 @@ export enum BotState {
     IDLE = 'IDLE',
     GREETING = 'GREETING',
     MAIN_MENU = 'MAIN_MENU',
+    BROWSING_CATEGORIES = 'BROWSING_CATEGORIES',
     BROWSING_PRODUCTS = 'BROWSING_PRODUCTS',
     VIEWING_PRODUCT = 'VIEWING_PRODUCT',
     SELECTING_VARIANT = 'SELECTING_VARIANT',
@@ -130,6 +131,7 @@ export interface SessionContext {
     lastActiveAt: number;
     isLockedToHuman: boolean;
     lastListId?: string;
+    lastShownCategories?: any[];
     lastShownProducts?: any[];   // must be an array, not boolean
     currentProduct?: any;
     meta?: any;

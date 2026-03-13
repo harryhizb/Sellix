@@ -16,9 +16,15 @@ app.post("/notify-customer", async (req: Request, res: Response) => {
         }
 
         const token = authHeader.split(" ")[1];
-        const decoded = verifyToken(token);
-        if (!decoded) {
-            return res.status(401).json({ error: "Invalid token" });
+        const internalSecret = process.env.INTERNAL_SERVICE_SECRET;
+
+        // Allow internal service calls with a shared secret (no JWT needed)
+        const isInternalCall = internalSecret && token === internalSecret;
+        if (!isInternalCall) {
+            const decoded = verifyToken(token);
+            if (!decoded) {
+                return res.status(401).json({ error: "Invalid token" });
+            }
         }
 
         const { businessId, customerPhone, message } = req.body;

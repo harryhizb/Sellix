@@ -12,6 +12,52 @@ export interface IBusiness extends Document {
     paymentInstructions?: string;
     slug?: string;
 
+    // Storefront Customization
+    storefront?: {
+        logoUrl?: string;
+        coverUrl?: string;
+        welcomeText?: string;
+        storeName?: string;
+        navbarTitle?: string;
+        heroTitle?: string;
+        heroSubtitle?: string;
+        ctaText?: string;
+        ctaLink?: string;
+        footerText?: string;
+        contactInfo?: string;
+        features?: { title: string; description: string; icon: string }[];
+        faqs?: { question: string; answer: string }[];
+
+        // Footer contact & social
+        contactEmail?: string;
+        contactPhone?: string;
+        footerStyle?: "dark" | "navy" | "slate";
+        socialLinks?: {
+            facebook?: string;
+            instagram?: string;
+            twitter?: string;
+        };
+
+        // Advanced Customization
+        theme?: {
+            primaryColor?: string;
+            textColor?: string;
+            bgColor?: string;
+            fontFamily?: string;
+            darkMode?: boolean;
+        };
+        layout?: {
+            heroLayout?: "split" | "centered" | "full";
+            featuresLayout?: "grid-3" | "grid-4";
+            featuresStyle?: "minimal" | "cards" | "accent";
+            faqStyle?: "minimal" | "cards" | "accent";
+        };
+        sections?: {
+            order?: string[];
+            hidden?: string[];
+        };
+    };
+
     // Enhanced AI Configuration Fields
     tone: string; // "formal" | "friendly" | "neutral" | "professional" | "casual"
     category: string; // "ecommerce" | "restaurant" | "service" | "institute" | "other"
@@ -179,7 +225,53 @@ const businessSchema = new Schema<IBusiness>({
         }
     },
     paymentInstructions: String,
-    slug: { type: String, unique: true },
+    slug: { type: String },
+
+    storefront: {
+        logoUrl: String,
+        coverUrl: String,
+        welcomeText: String,
+        storeName: String,
+        navbarTitle: String,
+        heroTitle: String,
+        heroSubtitle: String,
+        ctaText: String,
+        ctaLink: String,
+        footerText: String,
+        contactInfo: String,
+        features: [{ title: String, description: String, icon: String }],
+        faqs: [{ question: String, answer: String }],
+
+        // Footer contact & social fields (required for visual editor)
+        contactEmail: String,
+        contactPhone: String,
+        footerStyle: { type: String, enum: ["dark", "navy", "slate"], default: "dark" },
+        socialLinks: {
+            facebook: { type: String, default: "" },
+            instagram: { type: String, default: "" },
+            twitter: { type: String, default: "" },
+        },
+
+        // Advanced Customization
+        theme: {
+            primaryColor: { type: String, default: "#10b981" },
+            textColor: { type: String, default: "#1f2937" },
+            bgColor: { type: String, default: "#ffffff" },
+            fontFamily: { type: String, default: "font-sans" },
+            darkMode: { type: Boolean, default: false }
+        },
+        layout: {
+            heroLayout: { type: String, enum: ["split", "centered", "full"], default: "split" },
+            featuresLayout: { type: String, enum: ["grid-3", "grid-4"], default: "grid-3" },
+            featuresStyle: { type: String, enum: ["minimal", "cards", "accent"], default: "cards" },
+            faqStyle: { type: String, enum: ["minimal", "cards", "accent"], default: "cards" }
+        },
+        sections: {
+            order: { type: [String], default: ["hero", "products", "features", "faq", "footer"] },
+            hidden: { type: [String], default: [] }
+        }
+    },
+
 
     // AI Configuration
     tone: {

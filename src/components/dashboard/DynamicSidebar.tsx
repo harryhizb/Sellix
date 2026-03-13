@@ -83,7 +83,7 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
 
     if (isEcommerce) {
       fetchCounts();
-      interval = setInterval(fetchCounts, 15000); // Poll every 15s
+      interval = setInterval(fetchCounts, 60000); // Poll every 60s
     }
 
     return () => {
