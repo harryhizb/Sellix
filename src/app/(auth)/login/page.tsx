@@ -173,20 +173,16 @@ export default function LoginPage() {
         />
 
         <div className="relative z-10 flex flex-col justify-between p-12 xl:p-20 w-full">
-          <Link href="/" className="flex items-center gap-2.5 group">
+          {/* Logo Section - Now using a single tag and removed the span */}
+          <Link href="/" className="flex items-center group">
             <Image
-              src="/logo.png"
+              src="/logo2.png"
               alt="Sellix Logo"
-              width={60}
-              height={56}
-              className="rounded-lg"
+              width={250}
+              height={100}
+              className="object-contain ml-[-3rem]" // Pulls it 24px to the left
+              priority
             />
-            <span
-              style={{ fontWeight: 900, letterSpacing: "-0.02em", fontSize: "3rem" }}
-              className="text-white"
-            >
-              Sellix
-            </span>
           </Link>
 
           <div className="space-y-4 max-w-lg">

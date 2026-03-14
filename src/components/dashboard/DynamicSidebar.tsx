@@ -96,19 +96,16 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
   return (
     <div className="flex flex-col h-full bg-slate-950">
       {/* Header with Logo */}
-      <div className="p-5 border-b border-slate-800">
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
+      <div className="pl-4 border-b border-slate-800">
+        <Link href="/" className="flex items-center group">
           <Image
-            src="/logo.png"
+            src="/logo2.png"
             alt="Sellix Logo"
-            width={60}
-            height={56}
-            className="rounded-lg"
+            width={250}
+            height={100}
+            className="object-contain ml-[-3rem]" // Pulls it 24px to the left
+            priority
           />
-
-          <span style={{ fontWeight: 900, letterSpacing: "-0.02em", fontSize: "3rem" }}>
-            Sellix
-          </span>
         </Link>
       </div>
 

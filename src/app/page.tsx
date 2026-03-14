@@ -3149,18 +3149,36 @@ function Nav({ scrollY }: { scrollY: number }) {
       } : {}),
     }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
-          <a href="#" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none", color: "#fff" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: "linear-gradient(135deg,#7C3AED,#22C55E)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "1rem", boxShadow: "0 0 20px rgba(124,58,237,0.4)",
-            }}>💬</div>
-            <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.03em" }}>Sellix</span>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center", // Center navigation links
+          gap: "1rem",
+          position: "relative", // Needed for absolute positioning of children
+          height: "80px" // Ensure the header is tall enough for the larger logo
+        }}>
+
+          {/* Logo Container - Absolute positioning keeps it from "affecting others" */}
+          <a href="/" style={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+            position: "absolute",
+            left: 0 // Anchors logo to the far left
+          }}>
+            <img
+              src="/logo2.png"
+              alt="Sellix Logo"
+              style={{
+                height: "15rem", // Increased from 40px
+                width: "12rem", // Increased from 100px
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 10px rgba(124,58,237,0.3))"
+              }}
+            />
           </a>
 
-          {/* Desktop Links */}
+          {/* Desktop Links - These will stay centered or spaced correctly */}
           <div className="hidden md:flex" style={{ alignItems: "center", gap: 2 }}>
             {links.map(l => (
               <a key={l.href} href={l.href} style={{
@@ -3176,7 +3194,13 @@ function Nav({ scrollY }: { scrollY: number }) {
             ))}
           </div>
 
-          <div className="hidden md:flex" style={{ alignItems: "center", gap: "0.75rem" }}>
+          {/* Auth Buttons - Anchored to the right via absolute positioning */}
+          <div className="hidden md:flex" style={{
+            alignItems: "center",
+            gap: "0.75rem",
+            position: "absolute",
+            right: 0
+          }}>
             <a href="/login" style={{
               fontFamily: "var(--font-outfit)", fontSize: "0.875rem", fontWeight: 500,
               color: "rgba(255,255,255,0.4)", textDecoration: "none", padding: "0.5rem 0.75rem",
@@ -3200,7 +3224,7 @@ function Nav({ scrollY }: { scrollY: number }) {
           </div>
 
           {/* Mobile Toggle */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center" style={{ position: "absolute", right: 0 }}>
             <button onClick={() => setIsOpen(!isOpen)} style={{
               background: "transparent", border: "none", color: "#fff", fontSize: "1.5rem", cursor: "pointer"
             }}>
@@ -3321,24 +3345,42 @@ export default function SellixLanding() {
       <footer style={{
         borderTop: "1px solid rgba(255,255,255,0.05)",
         padding: "2rem",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: "1rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: "1rem",
         background: "rgba(255,255,255,0.01)",
-        position: "relative", zIndex: 1,
+        position: "relative",
+        zIndex: 1,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: 8,
-            background: "linear-gradient(135deg,#7C3AED,#22C55E)",
-            display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.85rem",
-          }}>💬</div>
-          <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "1rem", letterSpacing: "-0.02em" }}>Sellix</span>
+        {/* Logo Section - Replaced gradient div and span with one img tag */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src="/logo2.png"
+            alt="Sellix Logo"
+            style={{
+              width: "12rem",
+              height: "10rem", // Set to 15 as requested (standard for footer height)
+              objectFit: "contain",
+              filter: "drop-shadow(0 0 8px rgba(124,58,237,0.2))"
+            }}
+          />
         </div>
-        <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.22)" }}>© 2025 Sellix. All rights reserved.</p>
+
+        {/* Copyright - Stays in place */}
+        <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.22)" }}>
+          © 2025 Sellix. All rights reserved.
+        </p>
+
+        {/* Footer Links - Stays in place */}
         <div style={{ display: "flex", gap: "1.5rem" }}>
           {["Privacy", "Terms", "Contact"].map(l => (
             <a key={l} href="#" style={{
-              fontSize: "0.78rem", color: "rgba(255,255,255,0.25)", textDecoration: "none", transition: "color 0.2s",
+              fontSize: "0.78rem",
+              color: "rgba(255,255,255,0.25)",
+              textDecoration: "none",
+              transition: "color 0.2s",
             }}
               onMouseEnter={e => (e.currentTarget.style.color = "#22C55E")}
               onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}>
