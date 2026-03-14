@@ -263,7 +263,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
     }
   });
 
-  const orders = data?.orders || [];
+  const orders = useMemo(() => data?.orders ?? [], [data?.orders]);
   const statistics = data?.statistics || initialStatistics;
   const currentPagination = data?.pagination || pagination;
 

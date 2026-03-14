@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,12 +51,7 @@ export default function EditProductPage() {
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState<{_id: string, name: string}[]>([]);
 
-  useEffect(() => {
-    fetchProduct();
-    fetchCategories();
-  }, []);
-
-  async function fetchCategories() {
+  const fetchCategories = useCallback(async () => {
     if (!token) return;
     try {
       const res = await fetch("/api/categories", { headers: { Authorization: `Bearer ${token}` } });
@@ -65,9 +60,9 @@ export default function EditProductPage() {
     } catch (error) {
       console.error("Failed to fetch categories:", error);
     }
-  }
+  }, [token]);
 
-  async function fetchProduct() {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(`/api/products/${productId}`, {
@@ -86,7 +81,12 @@ export default function EditProductPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [token, productId, router]);
+
+  useEffect(() => {
+    fetchProduct();
+    fetchCategories();
+  }, [fetchProduct, fetchCategories]);
 
   const handleChange = (field: keyof IProduct, value: any) => {
     setProduct(prev => ({

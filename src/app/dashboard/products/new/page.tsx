@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Loader2, ArrowLeft, Plus, X, Upload } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useProductStore } from "@/stores/productStore";
 
 interface Variant {
@@ -394,10 +395,12 @@ export default function NewProductPage() {
               <div className="grid grid-cols-3 gap-4">
                 {formData.images.map((img, index) => (
                   <div key={index} className="relative w-full aspect-square rounded-xl overflow-hidden border border-white/[0.08] group">
-                    <img 
-                      src={img.secureUrl} 
-                      alt={`Product ${index + 1}`} 
-                      className="w-full h-full object-cover" 
+                    <Image
+                      src={img.secureUrl}
+                      alt={`Product ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 33vw, 20vw"
                     />
                     {index === 0 && (
                       <div className="absolute top-2 left-2 px-2 py-1 bg-[#25D366] text-white text-xs rounded font-medium">
