@@ -244,7 +244,7 @@ export default function CheckoutPage() {
                                     Order Confirmed!
                                 </h1>
                                 <p className="text-base font-medium leading-relaxed mb-10 max-w-sm" style={{ color: tCol }}>
-                                    Thank you for your purchase. We've sent a confirmation to your WhatsApp.
+                                    Thank you for your purchase. We&apos;ve sent a confirmation to your WhatsApp.
                                 </p>
 
                                 {/* Order Details Card */}

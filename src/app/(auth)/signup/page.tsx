@@ -228,7 +228,7 @@ export default function SignupPage() {
           <div className="glass rounded-2xl p-6">
             <Quote className="w-8 h-8 text-[#22C55E]/30 mb-3" />
             <p className="text-white/60 mb-4 leading-relaxed text-sm">
-              &ldquo;This AI has completely transformed how we handle customer inquiries. We're processing 3x more orders with the same team.&rdquo;
+              &ldquo;This AI has completely transformed how we handle customer inquiries. We&apos;re processing 3x more orders with the same team.&rdquo;
             </p>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A] flex items-center justify-center text-white font-semibold text-sm">

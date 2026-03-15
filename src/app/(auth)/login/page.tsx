@@ -218,7 +218,7 @@ export default function LoginPage() {
             <Quote className="w-8 h-8 text-[#22C55E]/30 mb-3" />
             <p className="text-white/60 mb-4 leading-relaxed text-sm">
               &ldquo;Setup took literally 5 minutes. Now our customers get instant responses at any hour.
-              Best investment we've made for our business.&rdquo;
+              Best investment we&apos;ve made for our business.&rdquo;
             </p>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#22C55E] to-[#16A34A] flex items-center justify-center text-white font-semibold text-sm">
@@ -408,7 +408,7 @@ export default function LoginPage() {
               </button>
 
               <p className="text-center text-white/40 mt-6">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   href="/signup"
                   className="text-white font-semibold hover:text-[#22C55E] transition-colors"

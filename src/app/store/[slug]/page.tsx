@@ -591,7 +591,7 @@ export default function StorefrontPage() {
                                         <Sparkles className="w-3.5 h-3.5" /> Collections
                                     </div>
                                     <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-3" style={{ color: headingColor }}>Shop by Category</h2>
-                                    <p className="text-base font-medium max-w-xl mx-auto" style={{ color: tCol }}>Find exactly what you're looking for.</p>
+                                    <p className="text-base font-medium max-w-xl mx-auto" style={{ color: tCol }}>Find exactly what you&apos;re looking for.</p>
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     {categories.map(cat => {
@@ -906,7 +906,7 @@ export default function StorefrontPage() {
                                                 boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.3)" : "0 4px 20px rgba(0,0,0,0.06)"
                                             }}>
                                             <Quote className="w-8 h-8 mb-4 flex-shrink-0" style={{ color: `${pCol}55` }} />
-                                            <p className="text-sm font-medium leading-relaxed mb-5 flex-1" style={{ color: tCol }}>"{t.text}"</p>
+                                            <p className="text-sm font-medium leading-relaxed mb-5 flex-1" style={{ color: tCol }}>&quot;{t.text}&quot;</p>
                                             <div className="flex items-center justify-between mt-auto">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm flex-shrink-0"

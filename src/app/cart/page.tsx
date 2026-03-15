@@ -84,7 +84,7 @@ export default function CartPage() {
                 </div>
                 <h1 className="text-3xl font-black mb-3" style={{ color: headingColor }}>Your Cart is Empty</h1>
                 <p className="mb-8 max-w-sm text-center font-medium" style={{ color: tCol }}>
-                    Looks like you haven't added any items to your cart yet. Discover some amazing products in the store!
+                    Looks like you haven&apos;t added any items to your cart yet. Discover some amazing products in the store!
                 </p>
                 <button 
                     onClick={() => router.back()} 

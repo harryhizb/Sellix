@@ -142,7 +142,7 @@ function VerifyContent() {
 
                         <div className="mt-6 text-sm">
                             <p className="text-white/40">
-                                Didn't receive the code?{" "}
+                                Didn&apos;t receive the code?{" "}
                                 <button className="text-[#22C55E] hover:text-[#1ea855] font-medium transition-colors">
                                     Resend
                                 </button>
