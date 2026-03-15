@@ -21,7 +21,9 @@ export async function PATCH(
     const { note } = body;
 
     // Call WA service
-    const waServiceUrl = process.env.WA_SERVICE_URL || "http://localhost:3001";
+    const rawUrl = process.env.WA_SERVICE_URL || "http://localhost:3001";
+    const waServiceUrl = rawUrl.replace(/\/+$/, '');
+    
     const response = await fetch(`${waServiceUrl}/api/orders/${params.id}/confirm`, {
       method: "PATCH",
       headers: {
@@ -31,15 +33,25 @@ export async function PATCH(
       body: JSON.stringify({ note }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error(`Received non-JSON response from WA service (${response.status}):`, text.substring(0, 200));
       return NextResponse.json(
-        { error: error.message || "Failed to confirm order" },
+        { error: "Upstream service returned an invalid response", details: text.substring(0, 100) },
+        { status: response.status >= 400 ? response.status : 502 }
+      );
+    }
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.error || data.message || "Failed to confirm order" },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("Error confirming order:", error);

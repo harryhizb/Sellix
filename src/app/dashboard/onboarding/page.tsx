@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,10 +35,30 @@ const AI_TONES = [
 ];
 
 function OnboardingContent() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const businessNameFromSignup = searchParams.get("businessName") || "";
+  const [businessName, setBusinessName] = useState(searchParams.get("businessName") || user?.businessName || "");
+
+  useEffect(() => {
+    async function fetchBusinessName() {
+      if (businessName) return;
+      if (!token) return;
+
+      try {
+        const res = await fetch("/api/business", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.business?.name) {
+          setBusinessName(data.business.name);
+        }
+      } catch (err) {
+        console.error("Failed to fetch business name:", err);
+      }
+    }
+    fetchBusinessName();
+  }, [businessName, token]);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -84,7 +104,7 @@ function OnboardingContent() {
     setLoading(true);
     try {
       const payload = {
-        name: businessNameFromSignup,
+        name: businessName,
         contactPhone: data.contactPhone,
         address: data.address,
         description: data.description,
@@ -192,9 +212,9 @@ function OnboardingContent() {
             "max-w-2xl mx-auto transition-all duration-300",
             animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
-            {currentStep === 0 && <BusinessStep data={data} setData={setData} businessName={businessNameFromSignup} />}
+            {currentStep === 0 && <BusinessStep data={data} setData={setData} businessName={businessName} />}
             {currentStep === 1 && <PoliciesStep data={data} setData={setData} />}
-            {currentStep === 2 && <ReviewStep data={data} businessName={businessNameFromSignup} onFinish={handleFinish} loading={loading} />}
+            {currentStep === 2 && <ReviewStep data={data} businessName={businessName} onFinish={handleFinish} loading={loading} />}
           </div>
         </div>
 

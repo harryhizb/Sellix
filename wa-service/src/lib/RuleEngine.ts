@@ -143,7 +143,7 @@ export class RuleEngine {
         if (routerResult) return this.finalize(session, routerResult);
 
         // Step 5: Final fallback — show main menu
-        const storeUrl = aiContext?.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${aiContext.slug}` : undefined;
+        const storeUrl = aiContext?.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${aiContext.slug}` : undefined;
         return this.finalize(session, {
             response: TemplateRegistry.mainMenu(aiContext?.name || 'Store', aiContext?.capabilities, storeUrl),
             newState: BotState.MAIN_MENU,
@@ -169,7 +169,7 @@ export class RuleEngine {
 
         // "menu" / "home" — always valid to reset to main menu
         if (input === 'menu' || input === 'home') {
-            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
                 response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,

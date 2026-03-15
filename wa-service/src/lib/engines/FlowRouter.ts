@@ -172,7 +172,7 @@ export class FlowRouter {
                 `🆘 *Customer Help Request*\n\n` +
                 `Customer *${customerPhone}* has selected the *Contact & Support* option and may need assistance.\n\n` +
                 `📱 Open your dashboard to respond:\n` +
-                `${process.env.DASHBOARD_URL || 'http://localhost:3000'}/dashboard/chat`;
+                `${process.env.DASHBOARD_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard/chat`;
               await whatsappSessionManager.sendMessage(session.businessId, ownerJid, { text: ownerMsg });
             }
           }).catch(err => console.error("[FlowRouter] Failed to notify owner on option 4:", err));
@@ -223,7 +223,7 @@ export class FlowRouter {
           JSON.stringify(context.policies, null, 2),
         );
         if (msgLower === "menu" || msgLower.includes("back")) {
-          const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+          const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
           return {
             response: TemplateRegistry.mainMenu(context.name || "Menu", caps, storeUrl),
             newState: BotState.MAIN_MENU,

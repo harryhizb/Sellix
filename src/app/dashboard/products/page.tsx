@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
@@ -102,7 +101,7 @@ const ProductCardMobile = React.memo(({
   onView: (id: string) => void;
 }) => {
   return (
-    <div className="glass rounded-xl p-4 mb-3 flex flex-col gap-3 relative sm:hidden">
+    <div className="glass rounded-xl p-4 mb-4 flex flex-col gap-3 relative shadow-lg border border-white/[0.05]">
       <div className="absolute top-4 right-4 z-10">
         <ProductActions product={product} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </div>
@@ -261,7 +260,12 @@ function ProductsPage() {
 
   const virtualizer = useWindowVirtualizer({
     count: filteredProducts.length,
-    estimateSize: () => 80, // Default row/card estimate
+    estimateSize: () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 640) {
+        return 160; // Mobile card height estimate
+      }
+      return 64; // Desktop row height estimate
+    },
     overscan: 5,
   });
 
@@ -307,7 +311,7 @@ function ProductsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard label="Total Products" value={products.length.toString()} trend={12} />
         <StatCard label="In Stock" value={inStockCount.toString()} trend={5} />
         <StatCard label="Low Stock" value={lowStockCount.toString()} alert={lowStockCount > 0} />
@@ -362,12 +366,13 @@ function ProductsPage() {
                 return (
                   <div
                     key={virtualRow.key}
+                    ref={virtualizer.measureElement}
+                    data-index={virtualRow.index}
                     style={{
                       position: 'absolute',
                       top: 0,
                       left: 0,
                       width: '100%',
-                      height: `${virtualRow.size}px`,
                       transform: `translateY(${virtualRow.start}px)`,
                     }}
                   >
@@ -385,7 +390,7 @@ function ProductsPage() {
                         </tbody>
                       </table>
                     </div>
-                    <div className="sm:hidden w-full px-0">
+                    <div className="sm:hidden w-full px-4">
                       <ProductCardMobile
                         product={product}
                         isSelected={isSelected}
@@ -404,11 +409,11 @@ function ProductsPage() {
       </div>
 
       {selectedProducts.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 glass rounded-xl px-6 py-3 shadow-2xl flex items-center gap-4 z-50">
-          <span className="text-sm text-white/50">{selectedProducts.length} selected</span>
-          <div className="h-4 w-px bg-white/[0.1]" />
-          <Button variant="ghost" size="sm" onClick={handleBulkDelete} className="text-red-400 hover:text-red-300 hover:bg-red-500/10">
-            <Trash2 className="w-4 h-4 mr-2" /> Delete Selected
+        <div className="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 glass rounded-xl px-4 sm:px-6 py-3 shadow-2xl flex items-center justify-between sm:justify-start gap-4 z-50 animate-in fade-in slide-in-from-bottom-4">
+          <span className="text-xs sm:text-sm text-white/50">{selectedProducts.length} selected</span>
+          <div className="hidden sm:block h-4 w-px bg-white/[0.1]" />
+          <Button variant="ghost" size="sm" onClick={handleBulkDelete} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 text-xs sm:text-sm">
+            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" /> Delete Selected
           </Button>
         </div>
       )}

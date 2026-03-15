@@ -256,7 +256,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
     enabled: !!token,
     refetchInterval: 15000, // Poll every 15 seconds to auto-refresh new orders
     initialData: () => {
-      if (fetchOrdersParams.includes(`page=${initialPagination.page}`)) {
+      if (initialOrders && initialOrders.length > 0 && fetchOrdersParams.includes(`page=${initialPagination.page}`)) {
         return { orders: initialOrders, statistics: initialStatistics, pagination: initialPagination };
       }
       return undefined;
@@ -271,8 +271,9 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
   const parentRef = useRef<HTMLDivElement>(null);
   const virtualizer = useWindowVirtualizer({
     count: orders.length,
-    estimateSize: () => 350,
-    overscan: 3,
+    estimateSize: () => (typeof window !== 'undefined' && window.innerWidth < 640 ? 450 : 350),
+    overscan: 5,
+    scrollMargin: parentRef.current?.offsetTop ?? 0,
   });
 
   useEffect(() => {
@@ -403,22 +404,40 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        <StatCard label="Total Orders" value={currentPagination.total.toString()} icon={ShoppingBag} />
-        <StatCard label="Pending" value={pendingCount.toString()} icon={Clock} alert={pendingCount > 0} />
-        <StatCard label="Delivered" value={deliveredCount.toString()} icon={CheckCircle} trend={12} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <StatCard
+          label="Total Orders"
+          value={currentPagination.total.toString()}
+          icon={ShoppingBag}
+        />
+        <StatCard
+          label="Pending"
+          value={pendingCount.toString()}
+          icon={Clock}
+          alert={pendingCount > 0}
+        />
+        <StatCard
+          label="Delivered"
+          value={deliveredCount.toString()}
+          icon={CheckCircle}
+          trend={12}
+        />
       </div>
 
       <div className="glass rounded-2xl p-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
-            <Input placeholder="Search orders..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-11 h-12 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 rounded-xl focus:border-[#25D366]/50" />
+            <Input 
+              placeholder="Search orders..." 
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} 
+              className="pl-11 h-12 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-white/30 rounded-xl focus:border-[#25D366]/50" 
+            />
           </div>
           <div className="flex gap-3">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-40 h-12 bg-white/[0.04] border-white/[0.08] text-white rounded-xl">
-                <Filter className="w-4 h-4 mr-2 text-white/50" />
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
               <SelectContent className="glass-dark border-white/[0.06]">
@@ -445,48 +464,44 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
         </div>
       </div>
 
-      <div ref={parentRef}>
+      <div
+        ref={parentRef}
+        className="relative w-full overflow-visible"
+        style={{ height: `${virtualizer.getTotalSize()}px` }}
+      >
         {orders.length === 0 ? (
           <EmptyState />
         ) : (
-          <div
-            style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}
-          >
-            {items.map((virtualRow) => {
-              const order = orders[virtualRow.index];
-              return (
-                <div
-                  key={virtualRow.key}
-                  className="pb-6" // Added padding to create spacing between virtualized cards
-                  ref={virtualizer.measureElement}
-                  data-index={virtualRow.index}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    transform: `translateY(${virtualRow.start}px)`,
+          virtualizer.getVirtualItems().map((virtualRow) => {
+            const order = orders[virtualRow.index];
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                ref={virtualizer.measureElement}
+                className="absolute top-0 left-0 w-full px-4 md:px-0 pb-4"
+                style={{
+                  transform: `translateY(${virtualRow.start - virtualizer.options.scrollMargin}px)`,
+                }}
+              >
+                <OrderCard
+                  order={order}
+                  statusConfig={statusConfig}
+                  onApprove={(id) => {
+                    const deliveryTime = prompt("Enter estimated delivery time (e.g., 2 days, 24 hours):");
+                    if (deliveryTime) {
+                      confirmMutation.mutate({ id, note: `Estimated Delivery: ${deliveryTime}` });
+                    }
                   }}
-                >
-                  <OrderCard
-                    order={order}
-                    statusConfig={statusConfig}
-                    onApprove={(id) => {
-                      const deliveryTime = prompt("Enter estimated delivery time (e.g., 2 days, 24 hours):");
-                      if (deliveryTime) {
-                        confirmMutation.mutate({ id, note: `Estimated Delivery: ${deliveryTime}` });
-                      }
-                    }}
-                    onReject={(order) => { setSelectedOrder(order); setIsRejectDialogOpen(true); }}
-                    onViewSummary={async (id) => {
-                      const summary = await getOrderSummary(id);
-                      if (summary) { setSelectedOrder({ ...order, summary }); setIsSummaryOpen(true); }
-                    }}
-                  />
-                </div>
-              );
-            })}
-          </div>
+                  onReject={(order) => { setSelectedOrder(order); setIsRejectDialogOpen(true); }}
+                  onViewSummary={async (id) => {
+                    const summary = await getOrderSummary(id);
+                    if (summary) { setSelectedOrder({ ...order, summary }); setIsSummaryOpen(true); }
+                  }}
+                />
+              </div>
+            );
+          })
         )}
       </div>
 
@@ -513,7 +528,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
               Order Summary
             </DialogTitle>
             <DialogDescription className="text-white/50">
-              Order #{selectedOrder?.orderNumber || selectedOrder?._id.slice(-6)}
+              Order #{selectedOrder?.orderNumber || selectedOrder?._id?.slice(-6) || "N/A"}
             </DialogDescription>
           </DialogHeader>
 
@@ -523,7 +538,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
                 {/* Formatted Summary Display */}
                 <div className="bg-gradient-to-br from-white/[0.03] to-white/[0.01] p-6 rounded-xl border border-white/[0.08]">
                   <div className="prose prose-invert max-w-none">
-                    {selectedOrder.summary.split('\n').map((line: string, idx: number) => {
+                    {selectedOrder?.summary?.split('\n').map((line: string, idx: number) => {
                       // Check if line is a section header
                       if (line.startsWith('###') || line.startsWith('**')) {
                         return (
@@ -571,7 +586,7 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
                   <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-3">
                     <p className="text-xs text-white/50 mb-1">Total Amount</p>
                     <p className="text-lg font-bold text-white font-mono">
-                      {selectedOrder.currency} {selectedOrder.totalAmount}
+                      {selectedOrder?.currency} {selectedOrder?.totalAmount}
                     </p>
                   </div>
                   <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-3">

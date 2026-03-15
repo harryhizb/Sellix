@@ -18,11 +18,11 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+const frontendUrl = process.env.FRONTEND_URL || "https://sellix-q2ab.vercel.app/";
 
 const io = new Server(httpServer, {
     cors: {
-        origin: [frontendUrl, "http://localhost:3000"],
+        origin: [frontendUrl, "https://sellix-q2ab.vercel.app/"],
         methods: ["GET", "POST"],
         credentials: true,
     },

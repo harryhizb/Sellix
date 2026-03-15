@@ -28,10 +28,16 @@ export function EmptyState({
 }: EmptyStateProps) {
   const renderIcon = () => {
     if (!iconProp) return null;
-    if (typeof iconProp === 'function') {
+    
+    // Check if it's a function (functional component) or a React object component (like Lucide forwardRefs)
+    const isComponent = typeof iconProp === 'function' || 
+                       (typeof iconProp === 'object' && iconProp !== null && '$$typeof' in iconProp);
+                       
+    if (isComponent) {
       const Icon = iconProp;
       return <Icon className={variant === "compact" ? "w-6 h-6 text-white/30" : "w-8 h-8 text-white/30"} />;
     }
+    
     return iconProp;
   };
 

@@ -8,6 +8,7 @@ interface User {
     name: string;
     email: string;
     businessId?: string;
+    businessName?: string;
     role?: string;
 }
 

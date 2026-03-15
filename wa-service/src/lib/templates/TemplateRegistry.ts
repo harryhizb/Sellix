@@ -646,7 +646,7 @@ export class TemplateRegistry {
         // Action Required
         msg += `⚡ *Action Required:*\n`;
         msg += `Please review and confirm this ${typeLabel.toLowerCase()} in your dashboard.\n\n`;
-        msg += `👉 ${process.env.DASHBOARD_URL || 'http://localhost:3000'}/dashboard/orders`;
+        msg += `👉 ${process.env.DASHBOARD_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard/orders`;
 
         return msg;
     }
@@ -829,7 +829,7 @@ export class TemplateRegistry {
             `Time: ${booking.time}\n` +
             `Customer: ${booking.name}\n` +
             `Phone: ${booking.phone}\n\n` +
-            `Check Dashboard: ${process.env.DASHBOARD_URL || 'http://localhost:3000'}/dashboard/appointments`;
+            `Check Dashboard: ${process.env.DASHBOARD_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard/appointments`;
     }
 
     // ──────────────────────────────────────────────────────────────────────────

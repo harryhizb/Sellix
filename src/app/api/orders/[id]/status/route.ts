@@ -15,10 +15,12 @@ export async function PATCH(
   try {
     const body = await req.json();
 
-    // Call backend service
+    // Call WA service
     // wa-service orders router expects POST for /:id/status
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_SERVICE_URL || "http://localhost:3001";
-    const response = await fetch(`${backendUrl}/api/orders/${params.id}/status`, {
+    const rawUrl = process.env.WA_SERVICE_URL || "http://localhost:3001";
+    const waServiceUrl = rawUrl.replace(/\/+$/, '');
+    
+    const response = await fetch(`${waServiceUrl}/api/orders/${params.id}/status`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -27,15 +29,25 @@ export async function PATCH(
       body: JSON.stringify(body),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error(`Received non-JSON response from WA service (${response.status}):`, text.substring(0, 200));
       return NextResponse.json(
-        { error: error.message || "Failed to update order status" },
+        { error: "Upstream service returned an invalid response", details: text.substring(0, 100) },
+        { status: response.status >= 400 ? response.status : 502 }
+      );
+    }
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.error || data.message || "Failed to update order status" },
         { status: response.status }
       );
     }
 
-    const data = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("Error updating order status:", error);

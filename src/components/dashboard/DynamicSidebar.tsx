@@ -95,8 +95,57 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
 
   return (
     <div className="flex flex-col h-full bg-slate-950">
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          .sidebar-header-logo img {
+            margin-left: -2rem !important;
+            width: 180px !important;
+            height: auto !important;
+          }
+          .sidebar-business-info {
+            padding: 0.75rem !important;
+          }
+          .sidebar-business-name {
+            font-size: 0.8rem !important;
+          }
+          .sidebar-nav-link {
+            padding: 0.6rem 0.75rem !important;
+            font-size: 0.8rem !important;
+          }
+          .sidebar-nav-icon {
+            width: 1rem !important;
+            height: 1rem !important;
+          }
+          .sidebar-footer {
+            padding: 0.75rem !important;
+          }
+          .sidebar-footer-text {
+            font-size: 0.7rem !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .sidebar-header-logo img {
+            margin-left: -1rem !important;
+            width: 140px !important;
+          }
+          .sidebar-business-info .business-details {
+            display: none !important; /* Hide name/status on very small screens, keep avatar */
+          }
+          .sidebar-business-info {
+            justify-content: center !important;
+          }
+          .sidebar-footer .footer-status-text {
+            display: none !important; /* Hide "System Online" text, keep dot */
+          }
+          .sidebar-footer .footer-subtext {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       {/* Header with Logo */}
-      <div className="pl-4 border-b border-slate-800">
+      <div className="sidebar-header-logo pl-4 border-b border-slate-800">
         <Link href="/" className="flex items-center group">
           <Image
             src="/logo2.png"
@@ -110,13 +159,13 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
       </div>
 
       {/* Business Info */}
-      <div className="px-4 py-4 border-b border-slate-800 relative z-20">
+      <div className="sidebar-business-info px-4 py-4 border-b border-slate-800 relative z-20">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold shadow-lg">
             {businessInitial}
           </div>
-          <div className="flex-1 min-w-0">
-            <h2 className="text-sm font-semibold text-white truncate z-30 relative">
+          <div className="business-details flex-1 min-w-0">
+            <h2 className="sidebar-business-name text-sm font-semibold text-white truncate z-30 relative">
               {businessName || 'My Business'}
             </h2>
             <div className="flex items-center gap-2 mt-1">
@@ -165,7 +214,7 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
               key={item.href}
               href={item.href}
               className={cn(
-                'group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative',
+                'sidebar-nav-link group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative',
                 isActive
                   ? applyEcommerceMainTabStyle
                     ? 'bg-gradient-to-r from-emerald-500/20 to-emerald-900/10 border border-emerald-500/30 text-white shadow-lg shadow-emerald-500/10'
@@ -182,7 +231,7 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
               )}
 
               <Icon className={cn(
-                "w-5 h-5 transition-colors duration-200",
+                "sidebar-nav-icon w-5 h-5 transition-colors duration-200",
                 isActive
                   ? applyEcommerceMainTabStyle ? "text-emerald-400" : "text-white"
                   : "text-slate-500 group-hover:text-slate-300"
@@ -199,7 +248,7 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
       </nav>
 
       {/* Footer - Connection Status */}
-      <div className="p-4 border-t border-slate-800">
+      <div className="sidebar-footer p-4 border-t border-slate-800">
         <div className={cn(
           "flex items-center gap-3 px-4 py-3 rounded-xl border",
           isConnected
@@ -217,12 +266,12 @@ export function DynamicSidebar({ capabilities, businessName, isConnected = true 
           </div>
           <div className="flex-1 min-w-0">
             <span className={cn(
-              "text-xs font-medium block",
+              "footer-status-text text-xs font-medium block",
               isConnected ? "text-emerald-400" : "text-red-400"
             )}>
               {isConnected ? "System Online" : "Disconnected"}
             </span>
-            <span className="text-[10px] text-slate-500">
+            <span className="footer-subtext text-[10px] text-slate-500">
               {isConnected ? "All services running" : "Check connection"}
             </span>
           </div>

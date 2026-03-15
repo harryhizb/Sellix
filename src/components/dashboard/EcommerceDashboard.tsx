@@ -213,10 +213,10 @@ export function EcommerceDashboard({ business }: EcommerceDashboardProps) {
                     </p>
                     <span className={cn(
                       "text-xs px-2 py-0.5 rounded-full",
-                      order.status === "DELIVERED" && "bg-emerald-500/10 text-emerald-400",
-                      order.status === "PENDING" && "bg-amber-500/10 text-amber-400",
-                      order.status === "PROCESSING" && "bg-blue-500/10 text-blue-400",
-                      order.status === "CANCELLED" && "bg-red-500/10 text-red-400",
+                      order.status?.toUpperCase() === "DELIVERED" && "bg-emerald-500/10 text-emerald-400",
+                      order.status?.toUpperCase() === "PENDING" && "bg-amber-500/10 text-amber-400",
+                      order.status?.toUpperCase() === "PROCESSING" && "bg-blue-500/10 text-blue-400",
+                      order.status?.toUpperCase() === "CANCELLED" && "bg-red-500/10 text-red-400",
                     )}>
                       {order.status}
                     </span>

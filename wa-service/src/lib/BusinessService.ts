@@ -159,7 +159,7 @@ export class BusinessService {
                         `Customer *${customerPhone}* has requested a human agent.\n\n` +
                         (reason ? `📝 *Reason:* ${reason}\n\n` : '') +
                         `📱 Open your dashboard to take over:\n` +
-                        `${process.env.DASHBOARD_URL || 'http://localhost:3000'}/dashboard/chat`;
+                        `${process.env.DASHBOARD_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard/chat`;
                     await whatsappSessionManager.sendMessage(businessId, ownerJid, msg);
                 }
             } catch (notifyError) {

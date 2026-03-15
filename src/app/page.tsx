@@ -723,6 +723,7 @@ function HeroSection() {
             <button
               onMouseEnter={() => setPrimaryHover(true)}
               onMouseLeave={() => setPrimaryHover(false)}
+              onClick={() => window.location.href = '/signup'}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 9,
                 background: primaryHover
@@ -1174,7 +1175,7 @@ function HowItWorksSection() {
     <section
       id="how"
       style={{
-        padding: "6rem 2rem",
+        padding: "4rem 1rem",
         position: "relative",
         zIndex: 1,
         background: "rgba(255,255,255,0.008)", // subtle background for depth
@@ -1464,6 +1465,27 @@ function ProductShowcaseSection() {
         overflow: "hidden",
       }}
     >
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 700px) {
+          .product-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+          }
+          .product-card {
+            padding: 1.5rem !important;
+          }
+        }
+        @media (max-width: 500px) {
+          .product-mini-grid {
+            grid-template-columns: 1fr !important;
+          }
+          section {
+            padding: 4rem 1rem !important;
+          }
+        }
+      `}</style>
+
       {/* Decorative background elements */}
       <div style={{
         position: "absolute",
@@ -1539,13 +1561,16 @@ function ProductShowcaseSection() {
         </div>
 
         {/* Two pillar cards with connecting bridge */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-          gap: "2rem",
-          alignItems: "stretch",
-          position: "relative",
-        }}>
+        <div
+          className="product-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", // reduced from 400px
+            gap: "2rem",
+            alignItems: "stretch",
+            position: "relative",
+          }}
+        >
           {/* Visual bridge line (hidden on mobile) */}
           <div className="hidden md:block" style={{
             position: "absolute",
@@ -1562,6 +1587,7 @@ function ProductShowcaseSection() {
           <div style={{ height: "100%" }}>
             <Reveal from="left">
               <div
+                className="product-card"
                 style={{
                   background: "rgba(255,255,255,0.02)",
                   backdropFilter: "blur(10px)",
@@ -1676,11 +1702,14 @@ function ProductShowcaseSection() {
                       <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.5)" }}>store.sellix.io/mystyle</div>
                     </div>
                   </div>
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "0.5rem",
-                  }}>
+                  <div
+                    className="product-mini-grid"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: "0.5rem",
+                    }}
+                  >
                     {[
                       { emoji: "👗", name: "Floral Dress", price: "$34" },
                       { emoji: "👟", name: "Sneakers", price: "$59" },
@@ -1711,6 +1740,7 @@ function ProductShowcaseSection() {
           <div style={{ height: "100%" }}>
             <Reveal from="right" delay={120}>
               <div
+                className="product-card"
                 style={{
                   background: "rgba(255,255,255,0.02)",
                   backdropFilter: "blur(10px)",
@@ -1846,20 +1876,68 @@ function ProductShowcaseSection() {
 function StatsBar() {
   return (
     <section style={{ padding: "5rem 2rem", position: "relative", zIndex: 1 }}>
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 600px) {
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.5rem !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .stats-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+          }
+          section {
+            padding: 4rem 1rem !important;
+          }
+        }
+      `}</style>
+
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "2rem", textAlign: "center" }}>
+        <div
+          className="stats-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "2rem",
+            textAlign: "center",
+          }}
+        >
           {STATS.map((s, i) => (
             <Reveal key={i} delay={i * 80}>
               <div>
-                <div style={{
-                  fontFamily: "var(--font-outfit)", fontWeight: 400,
-                  fontSize: "clamp(2.4rem,4.5vw,3.5rem)", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "0.4rem",
-                  ...(s.accent ? {
-                    background: "linear-gradient(135deg,#22C55E,#86EFAC)",
-                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                  } : { color: "#fff" }),
-                }}>{s.value}</div>
-                <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.32)", fontFamily: "var(--font-outfit)", fontWeight: 500 }}>{s.label}</div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-outfit)",
+                    fontWeight: 400,
+                    fontSize: "clamp(2.4rem, 4.5vw, 3.5rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1,
+                    marginBottom: "0.4rem",
+                    ...(s.accent
+                      ? {
+                        background: "linear-gradient(135deg,#22C55E,#86EFAC)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }
+                      : { color: "#fff" }),
+                  }}
+                >
+                  {s.value}
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "rgba(255,255,255,0.32)",
+                    fontFamily: "var(--font-outfit)",
+                    fontWeight: 500,
+                  }}
+                >
+                  {s.label}
+                </div>
               </div>
             </Reveal>
           ))}
@@ -2486,6 +2564,38 @@ function Testimonials() {
         background: "rgba(255,255,255,0.012)",
       }}
     >
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 900px) {
+          .testimonials-grid {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 1.5rem !important;
+            padding: 0 1.5rem !important;
+          }
+          .testimonial-card {
+            max-width: 500px !important;
+            width: 100% !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .hide-on-mobile {
+            display: none !important;
+          }
+        }
+        @media (max-width: 500px) {
+          section {
+            padding: 5rem 0 !important;
+          }
+          .testimonials-grid {
+            padding: 0 1rem !important;
+          }
+          .testimonial-card {
+            padding: 1.5rem !important;
+          }
+        }
+      `}</style>
+
       {/* Heading */}
       <div
         style={{
@@ -2509,6 +2619,7 @@ function Testimonials() {
         >
           Real stores.{" "}
           <span
+            className="hide-on-mobile"
             style={{
               fontStyle: "italic",
               fontWeight: 400,
@@ -2525,7 +2636,7 @@ function Testimonials() {
         <p
           style={{
             color: "rgba(255,255,255,0.35)",
-            fontSize: "1rem",
+            fontSize: "clamp(0.9rem, 2vw, 1rem)",
             marginTop: "1.25rem",
           }}
         >
@@ -2535,6 +2646,7 @@ function Testimonials() {
 
       {/* Static three cards */}
       <div
+        className="testimonials-grid"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -2544,7 +2656,9 @@ function Testimonials() {
           margin: "0 auto",
         }}
       >
+        {/* Card 1 */}
         <div
+          className="testimonial-card"
           style={{
             background: "rgba(255,255,255,0.05)",
             borderRadius: "1.5rem",
@@ -2552,17 +2666,33 @@ function Testimonials() {
             flex: 1,
             backdropFilter: "blur(10px)",
             border: "1px solid rgba(255,255,255,0.1)",
+            transition: "transform 0.3s ease, border-color 0.3s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.borderColor = "rgba(37,211,102,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
-          <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
+          <p style={{
+            color: "#fff",
+            fontSize: "clamp(1rem, 2vw, 1.1rem)",
+            lineHeight: 1.5,
+            marginBottom: "1.5rem"
+          }}>
             &quot;This app transformed our business! Customer engagement skyrocketed.&quot;
           </p>
-          <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
-          <div style={{ color: "#fff", fontWeight: 600 }}>Sarah J.</div>
-          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem" }}>Boutique Bloom</div>
+          <div style={{ color: "#25D366", marginBottom: "0.5rem", fontSize: "clamp(0.9rem, 2vw, 1rem)" }}>★★★★★</div>
+          <div style={{ color: "#fff", fontWeight: 600, fontSize: "clamp(0.95rem, 2vw, 1rem)" }}>Sarah J.</div>
+          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "clamp(0.85rem, 2vw, 0.9rem)" }}>Boutique Bloom</div>
         </div>
 
+        {/* Card 2 */}
         <div
+          className="testimonial-card"
           style={{
             background: "rgba(255,255,255,0.05)",
             borderRadius: "1.5rem",
@@ -2570,17 +2700,33 @@ function Testimonials() {
             flex: 1,
             backdropFilter: "blur(10px)",
             border: "1px solid rgba(255,255,255,0.1)",
+            transition: "transform 0.3s ease, border-color 0.3s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.borderColor = "rgba(37,211,102,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
-          <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
+          <p style={{
+            color: "#fff",
+            fontSize: "clamp(1rem, 2vw, 1.1rem)",
+            lineHeight: 1.5,
+            marginBottom: "1.5rem"
+          }}>
             &quot;Sales increased by 40% within the first month. Highly recommend! Amazing app&quot;
           </p>
-          <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
-          <div style={{ color: "#fff", fontWeight: 600 }}>Mike T.</div>
-          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem" }}>Tech Haven</div>
+          <div style={{ color: "#25D366", marginBottom: "0.5rem", fontSize: "clamp(0.9rem, 2vw, 1rem)" }}>★★★★★</div>
+          <div style={{ color: "#fff", fontWeight: 600, fontSize: "clamp(0.95rem, 2vw, 1rem)" }}>Mike T.</div>
+          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "clamp(0.85rem, 2vw, 0.9rem)" }}>Tech Haven</div>
         </div>
 
+        {/* Card 3 */}
         <div
+          className="testimonial-card"
           style={{
             background: "rgba(255,255,255,0.05)",
             borderRadius: "1.5rem",
@@ -2588,20 +2734,33 @@ function Testimonials() {
             flex: 1,
             backdropFilter: "blur(10px)",
             border: "1px solid rgba(255,255,255,0.1)",
+            transition: "transform 0.3s ease, border-color 0.3s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.borderColor = "rgba(37,211,102,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
           }}
         >
-          <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
+          <p style={{
+            color: "#fff",
+            fontSize: "clamp(1rem, 2vw, 1.1rem)",
+            lineHeight: 1.5,
+            marginBottom: "1.5rem"
+          }}>
             &quot;Incredible ROI and amazing support team. Absolutely essential tool.&quot;
           </p>
-          <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
-          <div style={{ color: "#fff", fontWeight: 600 }}>Elena R.</div>
-          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "0.9rem" }}>Fashion Forward</div>
+          <div style={{ color: "#25D366", marginBottom: "0.5rem", fontSize: "clamp(0.9rem, 2vw, 1rem)" }}>★★★★★</div>
+          <div style={{ color: "#fff", fontWeight: 600, fontSize: "clamp(0.95rem, 2vw, 1rem)" }}>Elena R.</div>
+          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "clamp(0.85rem, 2vw, 0.9rem)" }}>Fashion Forward</div>
         </div>
       </div>
     </section>
   );
 }
-
 
 
 function AudienceSection() {
@@ -2760,12 +2919,13 @@ function AvatarStack() {
 }
 
 /* ── floating stat badge ─────────────────────────────────────── */
-function StatBadge({ icon: Icon, label, value, animVal, style }: {
+function StatBadge({ icon: Icon, label, value, animVal, style, className }: {
   icon: any; label: string; value: string; animVal: number;
   style?: React.CSSProperties;
+  className?: string;
 }) {
   return (
-    <div style={{
+    <div className={className} style={{
       position: "absolute",
       background: "rgba(255,255,255,0.04)",
       border: "1px solid rgba(255,255,255,0.09)",
@@ -2885,6 +3045,68 @@ function FinalCTA() {
         isolation: "isolate",
       }}
     >
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          section {
+            padding: 6rem 1rem !important;
+          }
+          .cta-ghost-text {
+            font-size: clamp(4rem, 15vw, 8rem) !important;
+            transform: translate(-50%, -50%) !important;
+          }
+          .stat-badges {
+            position: relative !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            gap: 1rem !important;
+            margin-top: 3rem !important;
+            width: 100% !important;
+          }
+          .stat-badge {
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            animation: none !important;
+            margin: 0 !important;
+            transform: none !important;
+          }
+          .cta-split-button {
+            flex-direction: column !important;
+            border-radius: 40px !important;
+            width: 100% !important;
+            max-width: 320px !important;
+          }
+          .cta-split-button > button:first-child {
+            border-radius: 40px 40px 0 0 !important;
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          .cta-split-button > div:last-child {
+            border-radius: 0 0 40px 40px !important;
+            border-left: none !important;
+            border-top: 1px solid rgba(0,0,0,0.15) !important;
+            padding: 0.75rem !important;
+            width: 100% !important;
+          }
+          .cta-headline-first {
+            font-size: clamp(2.4rem, 8vw, 3rem) !important;
+          }
+          .cta-headline-second {
+            font-size: clamp(2.8rem, 8.5vw, 3.2rem) !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .stat-badges {
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+        }
+      `}</style>
+
       {/* ── animated dot grid ── */}
       <DotGrid />
 
@@ -2906,29 +3128,34 @@ function FinalCTA() {
       }} />
 
       {/* ── ghosted large word behind everything ── */}
-      <div style={{
-        position: "absolute", top: "50%", left: "50%",
-        transform: "translate(-50%,-56%)",
-        fontFamily: "var(--font-outfit)", fontWeight: 900,
-        fontSize: "clamp(8rem,22vw,20rem)",
-        letterSpacing: "-0.06em", lineHeight: 1,
-        color: "transparent",
-        WebkitTextStroke: "1px rgba(124,58,237,0.07)",
-        whiteSpace: "nowrap", pointerEvents: "none",
-        userSelect: "none",
-        opacity: visible ? 1 : 0,
-        transition: "opacity 1.5s ease",
-      }}>
+      <div
+        className="cta-ghost-text"
+        style={{
+          position: "absolute", top: "50%", left: "50%",
+          transform: "translate(-50%,-56%)",
+          fontFamily: "var(--font-outfit)", fontWeight: 900,
+          fontSize: "clamp(8rem,22vw,20rem)",
+          letterSpacing: "-0.06em", lineHeight: 1,
+          color: "transparent",
+          WebkitTextStroke: "1px rgba(124,58,237,0.07)",
+          whiteSpace: "nowrap", pointerEvents: "none",
+          userSelect: "none",
+          opacity: visible ? 1 : 0,
+          transition: "opacity 1.5s ease",
+        }}
+      >
         SELLIX
       </div>
 
-      {/* ── floating stat badges ── */}
+      {/* ── floating stat badges (wrapped for mobile) ── */}
       {visible && (
-        <>
+        <div className="stat-badges" style={{ position: "relative", zIndex: 5 }}>
           <StatBadge
             icon={Users} label="Active stores" value={`${businesses}+`}
             animVal={businesses}
+            className="stat-badge"
             style={{
+              position: "absolute",
               top: "18%", left: "max(2rem, calc(50% - 520px))",
               animation: "cta-floatA 6s ease-in-out infinite",
               opacity: visible ? 1 : 0,
@@ -2938,7 +3165,9 @@ function FinalCTA() {
           <StatBadge
             icon={ShoppingBag} label="Orders / minute" value={`${orders}k`}
             animVal={orders}
+            className="stat-badge"
             style={{
+              position: "absolute",
               top: "22%", right: "max(2rem, calc(50% - 520px))",
               animation: "cta-floatB 7s ease-in-out infinite",
               opacity: visible ? 1 : 0,
@@ -2948,14 +3177,16 @@ function FinalCTA() {
           <StatBadge
             icon={TrendingUp} label="Avg revenue growth" value={`${growth}%`}
             animVal={growth}
+            className="stat-badge"
             style={{
+              position: "absolute",
               bottom: "20%", left: "max(2rem, calc(50% - 480px))",
               animation: "cta-floatA 8s ease-in-out infinite reverse",
               opacity: visible ? 1 : 0,
               transition: "opacity 0.8s 0.7s ease",
             }}
           />
-        </>
+        </div>
       )}
 
       {/* ── main content block ── */}
@@ -2980,38 +3211,45 @@ function FinalCTA() {
           marginBottom: "2.5rem",
           letterSpacing: "0.05em",
           textTransform: "uppercase",
+          marginTop: "2.5rem",
         }}>
           <PulsingDot /> Free to start · No credit card
         </div>
 
         {/* headline — two-part stagger */}
         <h2 style={{ margin: "0 0 1.5rem", lineHeight: 0.92 }}>
-          <span style={{
-            display: "block",
-            fontFamily: "var(--font-outfit)", fontWeight: 800,
-            fontSize: "clamp(3rem, 7vw, 5.5rem)",
-            letterSpacing: "-0.055em", color: "#fff",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.7s 0.15s ease, transform 0.7s 0.15s cubic-bezier(0.16,1,0.3,1)",
-          }}>
+          <span
+            className="cta-headline-first"
+            style={{
+              display: "block",
+              fontFamily: "var(--font-outfit)", fontWeight: 800,
+              fontSize: "clamp(3rem, 7vw, 5.5rem)",
+              letterSpacing: "-0.055em", color: "#fff",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.7s 0.15s ease, transform 0.7s 0.15s cubic-bezier(0.16,1,0.3,1)",
+            }}
+          >
             Start Selling
           </span>
-          <span style={{
-            display: "block",
-            fontFamily: "var(--font-outfit)", fontWeight: 400,
-            fontStyle: "italic",
-            fontSize: "clamp(3.2rem, 7.5vw, 5.8rem)",
-            letterSpacing: "-0.04em",
-            background: "linear-gradient(125deg,#7C3AED 0%,#A855F7 30%,#22C55E 65%,#7C3AED 100%)",
-            backgroundSize: "280% auto",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            animation: "sellix-shimmer 5s linear infinite",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.7s 0.25s ease, transform 0.7s 0.25s cubic-bezier(0.16,1,0.3,1)",
-            paddingTop: "1rem",
-          }}>
+          <span
+            className="cta-headline-second"
+            style={{
+              display: "block",
+              fontFamily: "var(--font-outfit)", fontWeight: 400,
+              fontStyle: "italic",
+              fontSize: "clamp(3.2rem, 7.5vw, 5.8rem)",
+              letterSpacing: "-0.04em",
+              background: "linear-gradient(125deg,#7C3AED 0%,#A855F7 30%,#22C55E 65%,#7C3AED 100%)",
+              backgroundSize: "280% auto",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              animation: "sellix-shimmer 5s linear infinite",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.7s 0.25s ease, transform 0.7s 0.25s cubic-bezier(0.16,1,0.3,1)",
+              paddingTop: "1rem",
+            }}
+          >
             Smarter Today.
           </span>
         </h2>
@@ -3034,8 +3272,8 @@ function FinalCTA() {
           opacity: visible ? 1 : 0,
           transition: "opacity 0.7s 0.45s ease",
         }}>
-          {/* main button — split design */}
-          <div style={{ display: "flex", alignItems: "stretch", borderRadius: 999, overflow: "hidden" }}>
+          {/* main button — split design (now with responsive class) */}
+          <div className="cta-split-button" style={{ display: "flex", alignItems: "stretch", borderRadius: 999, overflow: "hidden" }}>
             {/* left text area */}
             <button
               onMouseEnter={() => setBtnHover(true)}
@@ -3137,130 +3375,270 @@ function Nav({ scrollY }: { scrollY: number }) {
     { href: "#pricing", label: "Pricing" },
     { href: "#faq", label: "FAQ" },
   ];
-  return (
-    <nav style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-      padding: scrolled ? "0.85rem 2rem" : "1.2rem 2rem",
-      transition: "all 0.4s ease",
-      ...(scrolled || isOpen ? {
-        background: "rgba(8,7,13,0.88)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-      } : {}),
-    }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center", // Center navigation links
-          gap: "1rem",
-          position: "relative", // Needed for absolute positioning of children
-          height: "80px" // Ensure the header is tall enough for the larger logo
-        }}>
 
-          {/* Logo Container - Absolute positioning keeps it from "affecting others" */}
-          <a href="/" style={{
+  return (
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 200,
+        padding: scrolled ? "0.85rem 2rem" : "1.2rem 2rem",
+        transition: "all 0.4s ease",
+        ...(scrolled || isOpen
+          ? {
+            background: "rgba(8,7,13,0.88)",
+            backdropFilter: "blur(24px)",
+            borderBottom: "1px solid rgba(255,255,255,0.06)",
+          }
+          : {}),
+      }}
+    >
+      {/* Responsive style overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-container {
+            padding: 0 1rem !important;
+          }
+          .nav-logo {
+            height: 6rem !important;
+            width: 5rem !important;
+          }
+          .nav-toggle {
+            font-size: 1.8rem !important;
+          }
+          .nav-mobile-menu {
+            padding: 1rem 0 1.5rem !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .nav-logo {
+            height: 5rem !important;
+            width: 4rem !important;
+          }
+          .nav-toggle {
+            font-size: 1.5rem !important;
+          }
+        }
+      `}</style>
+
+      <div style={{ maxWidth: 1200, margin: "0 auto" }} className="nav-container">
+        <div
+          style={{
             display: "flex",
             alignItems: "center",
-            textDecoration: "none",
-            position: "absolute",
-            left: 0 // Anchors logo to the far left
-          }}>
+            justifyContent: "center",
+            gap: "1rem",
+            position: "relative",
+            height: "80px",
+          }}
+        >
+          {/* Logo - absolute left */}
+          <a
+            href="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              position: "absolute",
+              left: 0,
+            }}
+          >
             <img
               src="/logo2.png"
               alt="Sellix Logo"
+              className="nav-logo"
               style={{
-                height: "15rem", // Increased from 40px
-                width: "12rem", // Increased from 100px
+                height: "15rem",
+                width: "12rem",
                 objectFit: "contain",
-                filter: "drop-shadow(0 0 10px rgba(124,58,237,0.3))"
+                filter: "drop-shadow(0 0 10px rgba(124,58,237,0.3))",
               }}
             />
           </a>
 
-          {/* Desktop Links - These will stay centered or spaced correctly */}
-          <div className="hidden md:flex" style={{ alignItems: "center", gap: 2 }}>
-            {links.map(l => (
-              <a key={l.href} href={l.href} style={{
-                padding: "0.5rem 1rem", borderRadius: 999,
-                fontFamily: "var(--font-outfit)", fontSize: "0.875rem", fontWeight: 500,
-                color: "rgba(255,255,255,0.5)", textDecoration: "none",
-                transition: "color 0.2s,background 0.2s",
-              }}
-                onMouseEnter={e => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.05)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent"; }}>
+          {/* Desktop Navigation Links (hidden on mobile) */}
+          <div
+            className="hidden md:flex"
+            style={{ alignItems: "center", gap: 2 }}
+          >
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                style={{
+                  padding: "0.5rem 1rem",
+                  borderRadius: 999,
+                  fontFamily: "var(--font-outfit)",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "rgba(255,255,255,0.5)",
+                  textDecoration: "none",
+                  transition: "color 0.2s,background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+                  e.currentTarget.style.background = "transparent";
+                }}
+              >
                 {l.label}
               </a>
             ))}
           </div>
 
-          {/* Auth Buttons - Anchored to the right via absolute positioning */}
-          <div className="hidden md:flex" style={{
-            alignItems: "center",
-            gap: "0.75rem",
-            position: "absolute",
-            right: 0
-          }}>
-            <a href="/login" style={{
-              fontFamily: "var(--font-outfit)", fontSize: "0.875rem", fontWeight: 500,
-              color: "rgba(255,255,255,0.4)", textDecoration: "none", padding: "0.5rem 0.75rem",
-              transition: "color 0.2s",
+          {/* Desktop Auth Buttons (hidden on mobile) */}
+          <div
+            className="hidden md:flex"
+            style={{
+              alignItems: "center",
+              gap: "0.75rem",
+              position: "absolute",
+              right: 0,
             }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}>
+          >
+            <a
+              href="/login"
+              style={{
+                fontFamily: "var(--font-outfit)",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                color: "rgba(255,255,255,0.4)",
+                textDecoration: "none",
+                padding: "0.5rem 0.75rem",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "rgba(255,255,255,0.4)")
+              }
+            >
               Log in
             </a>
-            <button style={{
-              background: "#22C55E", color: "#08070D",
-              fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "0.875rem",
-              padding: "0.6rem 1.4rem", borderRadius: 999, border: "none", cursor: "pointer",
-              transition: "transform 0.2s,box-shadow 0.2s",
-            }}
-              onClick={() => window.location.href = '/signup'}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(34,197,94,0.4)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
+            <button
+              style={{
+                background: "#22C55E",
+                color: "#08070D",
+                fontFamily: "var(--font-outfit)",
+                fontWeight: 800,
+                fontSize: "0.875rem",
+                padding: "0.6rem 1.4rem",
+                borderRadius: 999,
+                border: "none",
+                cursor: "pointer",
+                transition: "transform 0.2s,box-shadow 0.2s",
+              }}
+              onClick={() => (window.location.href = "/signup")}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow =
+                  "0 8px 28px rgba(34,197,94,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "";
+                e.currentTarget.style.boxShadow = "";
+              }}
+            >
               Start free →
             </button>
           </div>
 
-          {/* Mobile Toggle */}
-          <div className="md:hidden flex items-center" style={{ position: "absolute", right: 0 }}>
-            <button onClick={() => setIsOpen(!isOpen)} style={{
-              background: "transparent", border: "none", color: "#fff", fontSize: "1.5rem", cursor: "pointer"
-            }}>
+          {/* Mobile Toggle Button */}
+          <div
+            className="md:hidden"
+            style={{ position: "absolute", right: 0 }}
+          >
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="nav-toggle"
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#fff",
+                fontSize: "1.5rem",
+                cursor: "pointer",
+              }}
+            >
               {isOpen ? "✕" : "☰"}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Dropdown Menu */}
         {isOpen && (
-          <div className="md:hidden" style={{
-            display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "1.5rem", paddingBottom: "1rem",
-            borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem",
-          }}>
-            {links.map(l => (
-              <a key={l.href} href={l.href} onClick={() => setIsOpen(false)} style={{
-                fontFamily: "var(--font-outfit)", fontSize: "1rem", fontWeight: 600,
-                color: "rgba(255,255,255,0.8)", textDecoration: "none",
-                padding: "0.5rem 0",
-              }}>
+          <div
+            className="md:hidden nav-mobile-menu"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              paddingTop: "1.5rem",
+              paddingBottom: "1rem",
+              borderTop: "1px solid rgba(255,255,255,0.06)",
+              marginTop: "1rem",
+            }}
+          >
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setIsOpen(false)}
+                style={{
+                  fontFamily: "var(--font-outfit)",
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: "rgba(255,255,255,0.8)",
+                  textDecoration: "none",
+                  padding: "0.5rem 0",
+                }}
+              >
                 {l.label}
               </a>
             ))}
-            <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0.5rem 0" }} />
-            <a href="/login" style={{
-              fontFamily: "var(--font-outfit)", fontSize: "1rem", fontWeight: 600,
-              color: "rgba(255,255,255,0.8)", textDecoration: "none", padding: "0.5rem 0",
-            }}>
+            <div
+              style={{
+                height: "1px",
+                background: "rgba(255,255,255,0.06)",
+                margin: "0.5rem 0",
+              }}
+            />
+            <a
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              style={{
+                fontFamily: "var(--font-outfit)",
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "rgba(255,255,255,0.8)",
+                textDecoration: "none",
+                padding: "0.5rem 0",
+              }}
+            >
               Log in
             </a>
-            <button onClick={() => window.location.href = '/signup'} style={{
-              background: "#22C55E", color: "#08070D",
-              fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "1rem",
-              padding: "0.8rem", borderRadius: 999, border: "none", cursor: "pointer",
-              marginTop: "0.5rem", width: "100%",
-            }}>
+            <button
+              onClick={() => {
+                window.location.href = "/signup";
+                setIsOpen(false);
+              }}
+              style={{
+                background: "#22C55E",
+                color: "#08070D",
+                fontFamily: "var(--font-outfit)",
+                fontWeight: 800,
+                fontSize: "1rem",
+                padding: "0.8rem",
+                borderRadius: 999,
+                border: "none",
+                cursor: "pointer",
+                marginTop: "0.5rem",
+                width: "100%",
+              }}
+            >
               Start free →
             </button>
           </div>
@@ -3354,27 +3732,53 @@ export default function SellixLanding() {
         position: "relative",
         zIndex: 1,
       }}>
-        {/* Logo Section - Replaced gradient div and span with one img tag */}
+        {/* Responsive style overrides */}
+        <style>{`
+    @media (max-width: 600px) {
+      footer {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 2rem 1rem !important;
+      }
+      .footer-logo {
+        width: 10rem !important;
+        height: 6rem !important;
+      }
+      .footer-links {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+      }
+    }
+    @media (max-width: 400px) {
+      .footer-logo {
+        width: 8rem !important;
+        height: 5rem !important;
+      }
+    }
+  `}</style>
+
+        {/* Logo Section */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
             src="/logo2.png"
             alt="Sellix Logo"
+            className="footer-logo"
             style={{
               width: "12rem",
-              height: "10rem", // Set to 15 as requested (standard for footer height)
+              height: "10rem",
               objectFit: "contain",
               filter: "drop-shadow(0 0 8px rgba(124,58,237,0.2))"
             }}
           />
         </div>
 
-        {/* Copyright - Stays in place */}
+        {/* Copyright */}
         <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.22)" }}>
           © 2025 Sellix. All rights reserved.
         </p>
 
-        {/* Footer Links - Stays in place */}
-        <div style={{ display: "flex", gap: "1.5rem" }}>
+        {/* Footer Links */}
+        <div className="footer-links" style={{ display: "flex", gap: "1.5rem" }}>
           {["Privacy", "Terms", "Contact"].map(l => (
             <a key={l} href="#" style={{
               fontSize: "0.78rem",

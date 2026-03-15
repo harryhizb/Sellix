@@ -44,7 +44,7 @@ export class CartEngine {
     async handleCategoryBrowsing(session: SessionContext, message: string, context: any): Promise<RuleEngineResponse> {
         const input = normalizeInput(message);
         if (input.includes('back')) {
-            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return { response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl), newState: BotState.MAIN_MENU, updatedSession: session };
         }
 
@@ -99,7 +99,7 @@ export class CartEngine {
 
         if (input.includes('back') || input === '2') return this.handleBrowse(session, context);
         if (input === '3' || input === 'cmd_menu') {
-            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return { response: TemplateRegistry.mainMenu(context.name || 'Menu', context.capabilities, storeUrl), newState: BotState.MAIN_MENU, updatedSession: session };
         }
 
@@ -314,7 +314,7 @@ export class CartEngine {
         }
 
         if (input === '3' || input === 'cmd_menu') {
-            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
+            const storeUrl = context.slug ? `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/store/${context.slug}` : undefined;
             return {
                 response: TemplateRegistry.mainMenu(context.name || context.businessName || 'Store', context.capabilities, storeUrl),
                 newState: BotState.MAIN_MENU,

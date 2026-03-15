@@ -113,6 +113,7 @@ export async function POST(req: Request) {
                 name: user.name,
                 email: user.email,
                 businessId: businessIdStr,
+                businessName: type === "signup" ? businessName : undefined, // Will be fetched on onboarding if needed
                 role: user.role,
             },
         }, { status: type === "signup" ? 201 : 200 });
