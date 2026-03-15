@@ -9,7 +9,7 @@ export function ServiceDashboard({ business }: { business: any }) {
                 <h1 className="text-3xl font-bold text-foreground">
                     Welcome back{business?.name ? `, ${business.name}` : ''}!
                 </h1>
-                <p className="text-muted-foreground mt-2">Here's your Service & Booking overview.</p>
+                <p className="text-muted-foreground mt-2">Here&apos;s your Service &amp; Booking overview.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

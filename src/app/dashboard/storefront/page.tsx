@@ -802,7 +802,7 @@ export default function AdvancedStorefrontEditor() {
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-10">
                         <h2 className={`font-black tracking-tight mb-2 ${isMobile ? "text-2xl" : "text-4xl"}`} style={{ color: headingColor }}>Shop by Category</h2>
-                        <p className="text-sm" style={{ color: tCol }}>Find exactly what you're looking for.</p>
+                        <p className="text-sm" style={{ color: tCol }}>Find exactly what you&apos;re looking for.</p>
                     </div>
                     <div className={`grid gap-4 ${isMobile ? "grid-cols-2" : "grid-cols-4"}`}>
                         {["👗 Fashion", "📱 Electronics", "🛋️ Home", "🌿 Beauty"].map((c, i) => (
@@ -886,7 +886,7 @@ export default function AdvancedStorefrontEditor() {
                                 <div key={i} className="p-6 rounded-3xl border"
                                     style={{ backgroundColor: isDark ? "rgba(255,255,255,0.03)" : "#ffffff", borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)" }}>
                                     <div className="flex gap-0.5 mb-3">{Array.from({ length: t.rating || 5 }).map((_, idx) => <span key={idx} className="text-amber-400 text-sm">★</span>)}</div>
-                                    <p className="text-xs leading-relaxed mb-4" style={{ color: tCol }}>"{t.text}"</p>
+                                    <p className="text-xs leading-relaxed mb-4" style={{ color: tCol }}>&quot;{t.text}&quot;</p>
                                     <p className="font-black text-xs" style={{ color: headingColor }}>{t.name}</p>
                                 </div>
                             ))}

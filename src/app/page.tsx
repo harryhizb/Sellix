@@ -1052,7 +1052,7 @@ function PainSection() {
                 top: "-0.25em",
                 marginTop: "0.25em"
               }}>
-                shouldn't feel chaotic.
+                shouldn&apos;t feel chaotic.
               </span>
             </div>
             <p style={{
@@ -1062,7 +1062,7 @@ function PainSection() {
               margin: "0.5rem auto 0",
               lineHeight: 1.6
             }}>
-              You're losing customers right now — not because your product is bad, but because of this:
+              You&apos;re losing customers right now — not because your product is bad, but because of this:
             </p>
           </Reveal>
         </div>
@@ -2021,7 +2021,7 @@ export function FeaturesConstellation() {
               marginTop: "0.15em",
             }}
           >
-            Nothing you don't.
+            Nothing you don&apos;t.
           </span>
         </div>
 
@@ -2364,7 +2364,7 @@ function Card({ card, meta }: { card: CardData; meta: Meta }) {
           userSelect: "none",
         }}
       >
-        "
+        &quot;
       </div>
       <p
         style={{
@@ -2555,7 +2555,7 @@ export function Testimonials() {
           }}
         >
           <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
-            "This app transformed our business! Customer engagement skyrocketed."
+            &quot;This app transformed our business! Customer engagement skyrocketed.&quot;
           </p>
           <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
           <div style={{ color: "#fff", fontWeight: 600 }}>Sarah J.</div>
@@ -2573,7 +2573,7 @@ export function Testimonials() {
           }}
         >
           <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
-            "Sales increased by 40% within the first month. Highly recommend! Amazing app"
+            &quot;Sales increased by 40% within the first month. Highly recommend! Amazing app&quot;
           </p>
           <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
           <div style={{ color: "#fff", fontWeight: 600 }}>Mike T.</div>
@@ -2591,7 +2591,7 @@ export function Testimonials() {
           }}
         >
           <p style={{ color: "#fff", fontSize: "1.1rem", lineHeight: 1.5, marginBottom: "1.5rem" }}>
-            "Incredible ROI and amazing support team. Absolutely essential tool."
+            &quot;Incredible ROI and amazing support team. Absolutely essential tool.&quot;
           </p>
           <div style={{ color: "#25D366", marginBottom: "0.5rem" }}>★★★★★</div>
           <div style={{ color: "#fff", fontWeight: 600 }}>Elena R.</div>
