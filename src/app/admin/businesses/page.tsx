@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
   Building2, 
   Search, 
@@ -54,11 +54,9 @@ export default function AdminBusinessesPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    fetchBusinesses();
-  }, [page, statusFilter]);
 
-  async function fetchBusinesses() {
+
+  const fetchBusinesses = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -84,7 +82,11 @@ export default function AdminBusinessesPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [page, statusFilter, searchTerm]);
+
+  useEffect(() => {
+    fetchBusinesses();
+  }, [fetchBusinesses, page, statusFilter]);
 
   async function handleSuspendBusiness(businessId: string, currentStatus: string) {
     try {

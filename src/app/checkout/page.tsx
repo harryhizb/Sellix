@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+export const dynamic = 'force-dynamic';
+
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
     ArrowLeft,
     CheckCircle,
@@ -47,7 +50,7 @@ interface StoreInfo {
     darkMode?: boolean;
 }
 
-export default function CheckoutPage() {
+function CheckoutPageContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const slug = searchParams.get("store") || "";
@@ -72,14 +75,7 @@ export default function CheckoutPage() {
     const [order, setOrder] = useState<OrderResult | null>(null);
     const [activeStep, setActiveStep] = useState(1);
 
-    useEffect(() => {
-        const saved = slug ? localStorage.getItem(`store_theme_${slug}`) : null;
-        if (saved) setTheme(saved);
-        else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTheme("dark");
-
-        if (phoneParam) setForm((f) => ({ ...f, phone: phoneParam }));
-
-        // Fetch store info for consistent theming
+    const fetchStoreInfo = useCallback(() => {
         if (slug) {
             fetch(`/api/store/${slug}`)
                 .then(r => r.json())
@@ -94,6 +90,7 @@ export default function CheckoutPage() {
                             fontFamily: sf.theme?.fontFamily,
                             darkMode: sf.theme?.darkMode,
                         });
+                        const saved = slug ? localStorage.getItem(`store_theme_${slug}`) : null;
                         if (!saved) {
                             if (sf.theme?.darkMode) setTheme("dark");
                         }
@@ -101,7 +98,17 @@ export default function CheckoutPage() {
                 })
                 .catch(() => { });
         }
-    }, [phoneParam, slug]);
+    }, [slug]);
+
+    useEffect(() => {
+        const saved = slug ? localStorage.getItem(`store_theme_${slug}`) : null;
+        if (saved) setTheme(saved);
+        else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTheme("dark");
+
+        if (phoneParam) setForm((f) => ({ ...f, phone: phoneParam }));
+
+        fetchStoreInfo();
+    }, [phoneParam, slug, fetchStoreInfo]);
 
     const toggleTheme = () => {
         const next = theme === "light" ? "dark" : "light";
@@ -203,7 +210,7 @@ export default function CheckoutPage() {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             {storeInfo.logoUrl ? (
-                                <img src={storeInfo.logoUrl} alt={navTitle} className="w-9 h-9 rounded-xl object-cover shadow" />
+                                <Image src={storeInfo.logoUrl} alt={navTitle} width={36} height={36} className="w-9 h-9 rounded-xl object-cover shadow" />
                             ) : (
                                 <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black shadow-lg"
                                     style={{ backgroundColor: pCol }}>
@@ -324,7 +331,7 @@ export default function CheckoutPage() {
                             </Link>
                             <div className="flex items-center gap-3">
                                 {storeInfo.logoUrl ? (
-                                    <img src={storeInfo.logoUrl} alt={navTitle} className="w-9 h-9 rounded-xl object-cover shadow" />
+                                    <Image src={storeInfo.logoUrl} alt={navTitle} width={36} height={36} className="w-9 h-9 rounded-xl object-cover shadow" />
                                 ) : slug ? (
                                     <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black shadow"
                                         style={{ backgroundColor: pCol }}>
@@ -653,7 +660,7 @@ export default function CheckoutPage() {
                                         <div className="w-14 h-14 rounded-xl flex-shrink-0 relative overflow-hidden border"
                                             style={{ backgroundColor: isDark ? "rgba(255,255,255,0.06)" : "#f1f5f9", borderColor }}>
                                             {item.imageUrl ? (
-                                                <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                                                <Image src={item.imageUrl} alt={item.name} width={56} height={56} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center">
                                                     <ShoppingBag className="w-5 h-5" style={{ color: tCol, opacity: 0.4 }} />
@@ -741,5 +748,20 @@ export default function CheckoutPage() {
                 input::placeholder { opacity: 0.5; }
             `}</style>
         </div>
+    );
+}
+
+export default function CheckoutPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 rounded-full border-4 border-emerald-500/20 border-t-emerald-500 animate-spin" />
+                    <p className="text-slate-400 font-medium">Securing your checkout...</p>
+                </div>
+            </div>
+        }>
+            <CheckoutPageContent />
+        </Suspense>
     );
 }

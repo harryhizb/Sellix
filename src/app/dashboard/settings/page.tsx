@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,13 +69,9 @@ export default function SettingsPage() {
         return features;
     };
 
-    useEffect(() => {
-        if (token && user?.businessId) {
-            fetchBusinessSettings();
-        }
-    }, [token, user?.businessId]);
 
-    async function fetchBusinessSettings() {
+
+    const fetchBusinessSettings = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -93,11 +89,11 @@ export default function SettingsPage() {
 
             const data = await res.json();
             if (data.business) {
-                setBusiness({
-                    ...business,
+                setBusiness(prev => ({
+                    ...prev,
                     ...data.business,
                     features: mapCapabilitiesToFeatures(data.business.capabilities)
-                });
+                }));
             }
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : "Failed to load settings";
@@ -106,7 +102,13 @@ export default function SettingsPage() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [token]);
+
+    useEffect(() => {
+        if (token && user?.businessId) {
+            fetchBusinessSettings();
+        }
+    }, [token, user?.businessId, fetchBusinessSettings]);
 
     async function handleSave() {
         setSaving(true);

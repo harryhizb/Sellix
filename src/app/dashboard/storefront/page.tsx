@@ -11,6 +11,7 @@ import {
     Check, Zap, AlertCircle, X, FileText, Info
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { toast } from "sonner";
 
 interface Feature {
@@ -529,7 +530,7 @@ export default function AdvancedStorefrontEditor() {
                     >
                         <div className="flex items-center gap-3">
                             {cfg.logoUrl ? (
-                                <img src={cfg.logoUrl} alt="Logo" className="w-9 h-9 rounded-lg object-cover" />
+                                <Image src={cfg.logoUrl} alt="Logo" width={36} height={36} className="w-9 h-9 rounded-lg object-cover" />
                             ) : (
                                 <div className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-base text-white shadow-lg" style={{ backgroundColor: pCol }}>
                                     {cfg.storeName.charAt(0) || "S"}
@@ -564,7 +565,7 @@ export default function AdvancedStorefrontEditor() {
                             {(!isMobile || cfg.coverUrl) && (
                                 <div className={`flex-1 w-full ${isMobile ? "order-first mb-6" : ""}`}>
                                     {cfg.coverUrl ? (
-                                        <img src={cfg.coverUrl} className="w-full aspect-[4/3] object-cover rounded-3xl shadow-2xl" alt="Banner" />
+                                        <Image src={cfg.coverUrl} width={800} height={600} className="w-full aspect-[4/3] object-cover rounded-3xl shadow-2xl" alt="Banner" />
                                     ) : (
                                         <div className="w-full aspect-[4/3] rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-3"
                                             style={{ borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)", color: isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)" }}>
@@ -632,7 +633,7 @@ export default function AdvancedStorefrontEditor() {
                                 <div key={p.id} className="group rounded-3xl overflow-hidden border hover:shadow-2xl transition-all duration-300"
                                     style={{ borderColor: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", backgroundColor: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.01)" }}>
                                     <div className="aspect-[4/5] overflow-hidden">
-                                        <img src={p.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={p.name} />
+                                        <Image src={p.image} width={300} height={375} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={p.name} />
                                     </div>
                                     <div className="p-5">
                                         <h3 className="font-bold mb-2 line-clamp-1 text-sm" style={{ color: headingColor }}>{p.name}</h3>
@@ -740,7 +741,7 @@ export default function AdvancedStorefrontEditor() {
                             <div>
                                 <div className="flex items-center gap-3 mb-4">
                                     {cfg.logoUrl ? (
-                                        <img src={cfg.logoUrl} alt="Logo" className="w-9 h-9 rounded-xl object-cover" />
+                                        <Image src={cfg.logoUrl} alt="Logo" width={36} height={36} className="w-9 h-9 rounded-xl object-cover" />
                                     ) : (
                                         <div className="w-9 h-9 rounded-xl font-black flex items-center justify-center text-white text-sm shadow-lg" style={{ backgroundColor: pCol }}>
                                             {cfg.storeName.charAt(0) || "S"}

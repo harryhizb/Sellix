@@ -106,7 +106,7 @@ export default function ConnectionPage() {
     console.log(`[CONNECTION PAGE] Connecting to business ${businessId} in 500ms...`);
     const timeout = setTimeout(() => connectToBusiness(businessId), 500);
     return () => clearTimeout(timeout);
-  }, [isConnected, socket, currentBusiness, connectToBusiness, clearQRCode]);
+  }, [isConnected, socket, currentBusiness, connectToBusiness, clearQRCode, connectionStatus]);
 
   useEffect(() => () => {
     businessIdRef.current = null;

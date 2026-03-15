@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
   Star, 
   AlertTriangle, 
@@ -104,11 +104,9 @@ export default function AdminFeedbackPage() {
   const [adminNotes, setAdminNotes] = useState("");
   const [updating, setUpdating] = useState(false);
 
-  useEffect(() => {
-    fetchFeedback();
-  }, [pagination.page, messageTypeFilter, statusFilter]);
 
-  async function fetchFeedback() {
+
+  const fetchFeedback = useCallback(async () => {
     try {
       const params = new URLSearchParams({
         page: pagination.page.toString(),
@@ -134,7 +132,11 @@ export default function AdminFeedbackPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [pagination.page, pagination.limit, messageTypeFilter, statusFilter]);
+
+  useEffect(() => {
+    fetchFeedback();
+  }, [fetchFeedback]);
 
   async function handleStatusUpdate(feedbackId: string, newStatus: string) {
     try {

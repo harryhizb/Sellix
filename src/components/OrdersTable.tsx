@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,29 +57,9 @@ export default function OrdersTable() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    useEffect(() => {
-        if (token && user?.businessId) {
-            fetchOrders();
-        }
-    }, [token, user?.businessId]);
 
-    // Listen for real-time updates from wa-service
-    useEffect(() => {
-        if (!socket) return;
 
-        const handleRefresh = (data: any) => {
-            console.log("Socket Refresh Data event received:", data);
-            fetchOrders();
-        };
-
-        socket.on('refresh-data', handleRefresh);
-
-        return () => {
-            socket.off('refresh-data', handleRefresh);
-        };
-    }, [socket]);
-
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
         if (!token || !user?.businessId) {
             setError("Authentication required");
             setLoading(false);
@@ -110,7 +90,29 @@ export default function OrdersTable() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token, user?.businessId]);
+
+    useEffect(() => {
+        if (token && user?.businessId) {
+            fetchOrders();
+        }
+    }, [token, user?.businessId, fetchOrders]);
+
+    // Listen for real-time updates from wa-service
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleRefresh = (data: any) => {
+            console.log("Socket Refresh Data event received:", data);
+            fetchOrders();
+        };
+
+        socket.on('refresh-data', handleRefresh);
+
+        return () => {
+            socket.off('refresh-data', handleRefresh);
+        };
+    }, [socket, fetchOrders]);
 
     const updateStatus = async (orderId: string, status: string) => {
         try {

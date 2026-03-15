@@ -5,14 +5,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface EmptyStateProps {
-  icon: LucideIcon;
+  icon: any; // Accept LucideIcon or ReactNode
   title: string;
   description: string;
-  action?: {
-    label: string;
-    onClick: () => void;
-    icon?: LucideIcon;
-  };
+  action?: any; // Accept action object or ReactNode
   secondaryAction?: {
     label: string;
     onClick: () => void;
@@ -22,7 +18,7 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon: Icon,
+  icon: iconProp,
   title,
   description,
   action,
@@ -30,6 +26,32 @@ export function EmptyState({
   className,
   variant = "default",
 }: EmptyStateProps) {
+  const renderIcon = () => {
+    if (!iconProp) return null;
+    if (typeof iconProp === 'function') {
+      const Icon = iconProp;
+      return <Icon className={variant === "compact" ? "w-6 h-6 text-white/30" : "w-8 h-8 text-white/30"} />;
+    }
+    return iconProp;
+  };
+
+  const renderAction = () => {
+    if (!action) return null;
+    if (typeof action === 'object' && 'label' in action && 'onClick' in action) {
+      return (
+        <Button
+          onClick={action.onClick}
+          size={variant === "compact" ? "sm" : "default"}
+          className={cn("btn-primary text-white rounded-full", variant === "compact" ? "mt-4" : "")}
+        >
+          {action.icon && <action.icon className="w-4 h-4 mr-2" />}
+          {action.label}
+        </Button>
+      );
+    }
+    return action;
+  };
+
   if (variant === "compact") {
     return (
       <div
@@ -39,19 +61,11 @@ export function EmptyState({
         )}
       >
         <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-3">
-          <Icon className="w-6 h-6 text-white/30" />
+          {renderIcon()}
         </div>
         <h3 className="text-base font-semibold text-white mb-1">{title}</h3>
         <p className="text-sm text-white/50 max-w-sm">{description}</p>
-        {action && (
-          <Button
-            onClick={action.onClick}
-            size="sm"
-            className="mt-4 btn-primary text-white rounded-full"
-          >
-            {action.label}
-          </Button>
-        )}
+        {renderAction()}
       </div>
     );
   }
@@ -64,19 +78,12 @@ export function EmptyState({
       )}
     >
       <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
-        <Icon className="w-8 h-8 text-white/30" />
+        {renderIcon()}
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-sm text-white/50 max-w-sm mb-6">{description}</p>
       <div className="flex items-center gap-3">
-        {action && (
-          <Button
-            onClick={action.onClick}
-            className="btn-primary text-white rounded-full"
-          >
-            {action.label}
-          </Button>
-        )}
+        {renderAction()}
         {secondaryAction && (
           <Button
             variant="outline"

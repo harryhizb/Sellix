@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+export const dynamic = 'force-dynamic';
+
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { 
     Trash2, Plus, Minus, ShoppingBag, ArrowRight,
@@ -21,7 +24,7 @@ export default function CartPage() {
     const subtotal = getSubtotal();
     const slug = items[0]?.businessSlug || "";
 
-    useEffect(() => {
+    const fetchStoreInfo = useCallback(() => {
         if (!slug) {
             setLoading(false);
             return;
@@ -36,6 +39,10 @@ export default function CartPage() {
             .catch(console.error)
             .finally(() => setLoading(false));
     }, [slug]);
+
+    useEffect(() => {
+        fetchStoreInfo();
+    }, [fetchStoreInfo]);
 
     useEffect(() => {
         const saved = slug ? localStorage.getItem(`store_theme_${slug}`) : null;
@@ -151,7 +158,13 @@ export default function CartPage() {
                                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 border"
                                         style={{ backgroundColor: isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)", borderColor }}>
                                         {item.imageUrl ? (
-                                            <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                                            <Image 
+                                              src={item.imageUrl} 
+                                              alt={item.name} 
+                                              width={96} 
+                                              height={96} 
+                                              className="w-full h-full object-cover" 
+                                            />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
                                                 <ShoppingBag className="w-8 h-8 opacity-30" style={{ color: tCol }} />

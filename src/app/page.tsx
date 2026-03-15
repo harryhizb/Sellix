@@ -582,7 +582,7 @@ function TrustPill({ text }: { text: string }) {
 /* ══════════════════════════════════════════════════════════════
    HERO SECTION
 ══════════════════════════════════════════════════════════════ */
-export function HeroSection() {
+function HeroSection() {
   const typed = useTypewriter(["your storefront.", "your sales rep.", "your 24/7 team.", "your growth engine."]);
   const [primaryHover, setPrimaryHover] = useState(false);
   const [demoHover, setDemoHover] = useState(false);
@@ -1869,7 +1869,7 @@ function StatsBar() {
   );
 }
 
-export function FeaturesConstellation() {
+function FeaturesConstellation() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const svgLinesRef = useRef<SVGGElement>(null);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
@@ -2472,7 +2472,7 @@ function Lane({
   );
 }
 
-export function Testimonials() {
+function Testimonials() {
   const { ref, visible } = useIntersect(0.1);
 
   return (
@@ -2856,7 +2856,7 @@ function DotGrid() {
 /* ═══════════════════════════════════════════════════════════════
    MAIN COMPONENT
 ═══════════════════════════════════════════════════════════════ */
-export function FinalCTA() {
+function FinalCTA() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [btnHover, setBtnHover] = useState(false);

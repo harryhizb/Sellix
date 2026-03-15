@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { IProduct } from "@/types/product";
@@ -26,11 +27,9 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<IProduct | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProduct();
-  }, []);
 
-  async function fetchProduct() {
+
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(`/api/products/${productId}`, {
@@ -49,7 +48,11 @@ export default function ProductDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [productId, token, router]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   if (loading) {
     return (
@@ -92,9 +95,11 @@ export default function ProductDetailPage() {
             </h2>
             <div className="aspect-square rounded-xl bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center">
               {product.imageUrl ? (
-                <img 
+                <Image 
                   src={product.imageUrl} 
                   alt={product.name} 
+                  width={400} 
+                  height={400} 
                   className="w-full h-full object-cover"
                 />
               ) : (

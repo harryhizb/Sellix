@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,11 +29,9 @@ export default function ConversationHistory({
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    loadHistory();
-  }, [customerId, businessId]);
 
-  const loadHistory = async () => {
+
+  const loadHistory = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -49,7 +47,11 @@ export default function ConversationHistory({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [customerId, businessId]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
 
   const filteredMessages = messages.filter((message) => {
     const matchesSearch = searchQuery === "" || 
