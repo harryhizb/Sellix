@@ -13,6 +13,8 @@
 # testing
 /coverage
 
+wa-service/
+
 # next.js
 /.next/
 /out/
