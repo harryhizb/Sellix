@@ -237,7 +237,8 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (!token) return;
 
-        const socketInstance = io(clientEnv.WA_SERVICE_URL, {
+        const baseUrl = clientEnv.WA_SERVICE_URL.replace(/\/+$/, '');
+        const socketInstance = io(baseUrl, {
             auth: { token },
             reconnection: true,
             reconnectionAttempts: 5,
@@ -283,20 +284,26 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const refreshConnectionStatus = useCallback(async () => {
         if (!token || !currentBusiness?._id) return;
         try {
-            const response = await fetch(`${clientEnv.WA_SERVICE_URL}/api/whatsapp/status`, {
+            const baseUrl = clientEnv.WA_SERVICE_URL.replace(/\/+$/, '');
+            const response = await fetch(`${baseUrl}/api/whatsapp/status`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.ok) {
-                const data = await response.json();
-                // Update both connectionStatus AND local status to stay in sync
-                setStatus(data.status || "disconnected");
-                setConnectionStatus({
-                    businessId: currentBusiness._id,
-                    status: data.status,
-                    qr: data.qr,
-                    message: data.status === "connected" ? "Connected" : "Disconnected"
-                });
-                console.log(`[SOCKET] Refreshed status from API: ${data.status}`);
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    // Update both connectionStatus AND local status to stay in sync
+                    setStatus(data.status || "disconnected");
+                    setConnectionStatus({
+                        businessId: currentBusiness._id,
+                        status: data.status,
+                        qr: data.qr,
+                        message: data.status === "connected" ? "Connected" : "Disconnected"
+                    });
+                    console.log(`[SOCKET] Refreshed status from API: ${data.status}`);
+                } catch (parseError) {
+                    console.error("[SOCKET] Failed to parse status response:", text.substring(0, 100));
+                }
             }
         } catch (error) {
             console.error("Failed to refresh connection status:", error);
