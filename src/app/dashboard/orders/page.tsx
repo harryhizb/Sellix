@@ -39,16 +39,18 @@ type OrderStatus = keyof typeof statusConfig;
 export default async function OrdersPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const params = await searchParams;
+
   const initialData = await getOrders({
-    page: typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1,
-    limit: typeof searchParams.limit === "string" ? parseInt(searchParams.limit) : 20,
-    status: typeof searchParams.status === "string" ? searchParams.status : undefined,
-    type: typeof searchParams.type === "string" ? searchParams.type : undefined,
-    search: typeof searchParams.search === "string" ? searchParams.search : undefined,
-    startDate: typeof searchParams.startDate === "string" ? searchParams.startDate : undefined,
-    endDate: typeof searchParams.endDate === "string" ? searchParams.endDate : undefined,
+    page: typeof params.page === "string" ? parseInt(params.page) : 1,
+    limit: typeof params.limit === "string" ? parseInt(params.limit) : 20,
+    status: typeof params.status === "string" ? params.status : undefined,
+    type: typeof params.type === "string" ? params.type : undefined,
+    search: typeof params.search === "string" ? params.search : undefined,
+    startDate: typeof params.startDate === "string" ? params.startDate : undefined,
+    endDate: typeof params.endDate === "string" ? params.endDate : undefined,
   });
 
   return (

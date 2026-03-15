@@ -28,7 +28,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   const renderIcon = () => {
     if (!iconProp) return null;
-    if (typeof iconProp === 'function') {
+    if (typeof iconProp === 'function' || (typeof iconProp === 'object' && '$$typeof' in iconProp)) {
       const Icon = iconProp;
       return <Icon className={variant === "compact" ? "w-6 h-6 text-white/30" : "w-8 h-8 text-white/30"} />;
     }

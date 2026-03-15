@@ -258,16 +258,30 @@ orderSchema.virtual('ageInHours').get(function () {
 // Pre-save middleware to generate order number
 orderSchema.pre('save', async function () {
   if (this.isNew && !this.orderNumber) {
-    const year = new Date().getFullYear();
-    const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-    const count = await mongoose.model('Order').countDocuments({
-      businessId: this.businessId,
-      createdAt: {
-        $gte: new Date(`${year}-${month}-01`),
-        $lt: new Date(`${year}-${parseInt(month) + 1}-01`)
+    let isUnique = false;
+    let attempts = 0;
+    
+    while (!isUnique && attempts < 5) {
+      // Generate format: YYYYMMDD-XXXX (e.g. 20260316-4921)
+      const date = new Date();
+      const datePart = date.toISOString().slice(0, 10).replace(/-/g, '');
+      const randomPart = Math.floor(1000 + Math.random() * 9000);
+      const proposedNumber = `${datePart}-${randomPart}`;
+      
+      // Check if this specific order number already exists anywhere
+      const existing = await mongoose.model('Order').findOne({ orderNumber: proposedNumber });
+      
+      if (!existing) {
+        this.orderNumber = proposedNumber;
+        isUnique = true;
       }
-    });
-    this.orderNumber = `${year}${month}${(count + 1).toString().padStart(4, '0')}`;
+      attempts++;
+    }
+    
+    // Fallback if we somehow hit 5 collisions
+    if (!isUnique) {
+      this.orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    }
   }
 
   // Update status history if status changed
