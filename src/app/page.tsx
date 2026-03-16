@@ -722,8 +722,8 @@ function HeroSection() {
             {/* Primary */}
             <button
               onMouseEnter={() => setPrimaryHover(true)}
-              onMouseLeave={() => setPrimaryHover(false)}
               onClick={() => window.location.href = '/signup'}
+              onMouseLeave={() => setPrimaryHover(false)}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 9,
                 background: primaryHover
@@ -1175,7 +1175,7 @@ function HowItWorksSection() {
     <section
       id="how"
       style={{
-        padding: "4rem 1rem",
+        padding: "6rem 2rem",
         position: "relative",
         zIndex: 1,
         background: "rgba(255,255,255,0.008)", // subtle background for depth
@@ -2173,14 +2173,22 @@ function FeaturesConstellation() {
               zIndex: 10,
             }}
           >
-            <div style={{
-              width: 90, height: 90, borderRadius: "50%",
-              background: "radial-gradient(circle at 35% 35%, #2EE872, #128C7E)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "2.2rem",
-              border: "1.5px solid rgba(37,211,102,0.4)",
-              boxShadow: "0 0 28px rgba(37,211,102,0.28)",
-            }}>💬</div>
+            {/* Circle with border only */}
+            <div
+              style={{
+                width: 90,
+                height: 90,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1.5px solid rgba(10, 18, 13, 0.64)", // border only
+                boxShadow: "0 0 28px rgba(37,211,102,0.28)", // optional glow
+                background: "transparent", // explicitly no background
+              }}
+            >
+              <img src="/favicon.png" alt="" style={{ width: "60%", height: "60%", objectFit: "contain" }} />
+            </div>
             <div
               style={{
                 fontSize: "0.72rem",
@@ -2557,7 +2565,7 @@ function Testimonials() {
     <section
       ref={ref}
       style={{
-        padding: "8rem 0",
+        padding: "6rem -2rem",
         position: "relative",
         zIndex: 1,
         overflow: "hidden",

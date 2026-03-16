@@ -244,6 +244,11 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
   }).toString(), [pagination.page, pagination.limit, statusFilter, typeFilter, searchQuery]);
 
   // React Query Fetch Data
+  // Only use SSR initialData when we actually have orders from the server.
+  // If SSR returned empty (token was in localStorage only, not cookie), we
+  // skip initialData so React Query immediately fetches client-side.
+  const hasSSRData = initialOrders.length > 0 || initialPagination.total > 0;
+
   const { data, isLoading, isRefetching, refetch } = useQuery({
     queryKey: ['orders', token, fetchOrdersParams],
     queryFn: async () => {
@@ -256,7 +261,11 @@ function OrdersList({ initialOrders, initialStatistics, initialPagination, statu
     enabled: !!token,
     refetchInterval: 15000, // Poll every 15 seconds to auto-refresh new orders
     initialData: () => {
+<<<<<<< HEAD
       if (initialOrders && initialOrders.length > 0 && fetchOrdersParams.includes(`page=${initialPagination.page}`)) {
+=======
+      if (hasSSRData && fetchOrdersParams.includes(`page=${initialPagination.page}`)) {
+>>>>>>> master
         return { orders: initialOrders, statistics: initialStatistics, pagination: initialPagination };
       }
       return undefined;

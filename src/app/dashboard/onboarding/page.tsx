@@ -38,6 +38,7 @@ function OnboardingContent() {
   const { token, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+<<<<<<< HEAD
   const [businessName, setBusinessName] = useState(searchParams.get("businessName") || user?.businessName || "");
 
   useEffect(() => {
@@ -59,12 +60,15 @@ function OnboardingContent() {
     }
     fetchBusinessName();
   }, [businessName, token]);
+=======
+>>>>>>> master
 
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [animateIn, setAnimateIn] = useState(true);
 
   const [data, setData] = useState({
+    businessName: searchParams.get("businessName") || user?.name || "",
     contactPhone: "",
     address: "",
     description: "",
@@ -104,7 +108,11 @@ function OnboardingContent() {
     setLoading(true);
     try {
       const payload = {
+<<<<<<< HEAD
         name: businessName,
+=======
+        name: data.businessName,
+>>>>>>> master
         contactPhone: data.contactPhone,
         address: data.address,
         description: data.description,
@@ -212,9 +220,15 @@ function OnboardingContent() {
             "max-w-2xl mx-auto transition-all duration-300",
             animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
+<<<<<<< HEAD
             {currentStep === 0 && <BusinessStep data={data} setData={setData} businessName={businessName} />}
             {currentStep === 1 && <PoliciesStep data={data} setData={setData} />}
             {currentStep === 2 && <ReviewStep data={data} businessName={businessName} onFinish={handleFinish} loading={loading} />}
+=======
+            {currentStep === 0 && <BusinessStep data={data} setData={setData} />}
+            {currentStep === 1 && <PoliciesStep data={data} setData={setData} />}
+            {currentStep === 2 && <ReviewStep data={data} onFinish={handleFinish} loading={loading} />}
+>>>>>>> master
           </div>
         </div>
 
@@ -272,7 +286,7 @@ function OnboardingContent() {
   );
 }
 
-function BusinessStep({ data, setData, businessName }: { data: any, setData: any, businessName: string }) {
+function BusinessStep({ data, setData }: { data: any, setData: any }) {
   return (
     <div className="space-y-8">
       <div>
@@ -280,15 +294,15 @@ function BusinessStep({ data, setData, businessName }: { data: any, setData: any
         <p className="text-slate-400">Configure how your AI assistant will handle sales</p>
       </div>
 
-      {/* Store Name (read-only from signup) */}
+      {/* Store Name */}
       <div className="p-6 bg-slate-900 border border-slate-800 rounded-2xl">
-        <Label className="text-white">Store Name</Label>
+        <Label className="text-white">Store Name *</Label>
         <Input
-          value={businessName}
-          disabled
-          className="mt-2 bg-slate-800 border-slate-700 text-white opacity-70 cursor-not-allowed"
+          value={data.businessName}
+          onChange={(e) => setData({ ...data, businessName: e.target.value })}
+          className="mt-2 bg-slate-950 border-slate-700 text-white placeholder:text-slate-600 focus:border-[#25D366]"
         />
-        <p className="text-xs text-slate-500 mt-2">This was set during signup</p>
+        <p className="text-xs text-slate-500 mt-2">The public name of your store</p>
       </div>
 
       {/* WhatsApp Number for Notifications */}
@@ -578,7 +592,7 @@ function PoliciesStep({ data, setData }: { data: any, setData: any }) {
   );
 }
 
-function ReviewStep({ data, businessName, onFinish, loading }: { data: any, businessName: string, onFinish: () => void, loading: boolean }) {
+function ReviewStep({ data, onFinish, loading }: { data: any, onFinish: () => void, loading: boolean }) {
   const tone = AI_TONES.find(t => t.id === data.tone);
 
   return (
@@ -594,7 +608,7 @@ function ReviewStep({ data, businessName, onFinish, loading }: { data: any, busi
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-slate-400">Name</span>
-              <span className="text-white font-medium">{businessName}</span>
+              <span className="text-white font-medium">{data.businessName}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">WhatsApp</span>
