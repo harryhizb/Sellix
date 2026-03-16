@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,30 +38,6 @@ function OnboardingContent() {
   const { token, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-<<<<<<< HEAD
-  const [businessName, setBusinessName] = useState(searchParams.get("businessName") || user?.businessName || "");
-
-  useEffect(() => {
-    async function fetchBusinessName() {
-      if (businessName) return;
-      if (!token) return;
-
-      try {
-        const res = await fetch("/api/business", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const data = await res.json();
-        if (data.business?.name) {
-          setBusinessName(data.business.name);
-        }
-      } catch (err) {
-        console.error("Failed to fetch business name:", err);
-      }
-    }
-    fetchBusinessName();
-  }, [businessName, token]);
-=======
->>>>>>> master
 
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -108,11 +84,7 @@ function OnboardingContent() {
     setLoading(true);
     try {
       const payload = {
-<<<<<<< HEAD
-        name: businessName,
-=======
         name: data.businessName,
->>>>>>> master
         contactPhone: data.contactPhone,
         address: data.address,
         description: data.description,
@@ -220,15 +192,9 @@ function OnboardingContent() {
             "max-w-2xl mx-auto transition-all duration-300",
             animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}>
-<<<<<<< HEAD
-            {currentStep === 0 && <BusinessStep data={data} setData={setData} businessName={businessName} />}
-            {currentStep === 1 && <PoliciesStep data={data} setData={setData} />}
-            {currentStep === 2 && <ReviewStep data={data} businessName={businessName} onFinish={handleFinish} loading={loading} />}
-=======
             {currentStep === 0 && <BusinessStep data={data} setData={setData} />}
             {currentStep === 1 && <PoliciesStep data={data} setData={setData} />}
             {currentStep === 2 && <ReviewStep data={data} onFinish={handleFinish} loading={loading} />}
->>>>>>> master
           </div>
         </div>
 

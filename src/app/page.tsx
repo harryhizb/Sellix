@@ -1175,7 +1175,7 @@ function HowItWorksSection() {
     <section
       id="how"
       style={{
-        padding: "6rem 2rem",
+        padding: "2rem 2rem",
         position: "relative",
         zIndex: 1,
         background: "rgba(255,255,255,0.008)", // subtle background for depth
@@ -3219,7 +3219,6 @@ function FinalCTA() {
           marginBottom: "2.5rem",
           letterSpacing: "0.05em",
           textTransform: "uppercase",
-          marginTop: "2.5rem",
         }}>
           <PulsingDot /> Free to start · No credit card
         </div>
@@ -3383,270 +3382,130 @@ function Nav({ scrollY }: { scrollY: number }) {
     { href: "#pricing", label: "Pricing" },
     { href: "#faq", label: "FAQ" },
   ];
-
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 200,
-        padding: scrolled ? "0.85rem 2rem" : "1.2rem 2rem",
-        transition: "all 0.4s ease",
-        ...(scrolled || isOpen
-          ? {
-            background: "rgba(8,7,13,0.88)",
-            backdropFilter: "blur(24px)",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
-          }
-          : {}),
-      }}
-    >
-      {/* Responsive style overrides */}
-      <style>{`
-        @media (max-width: 768px) {
-          .nav-container {
-            padding: 0 1rem !important;
-          }
-          .nav-logo {
-            height: 6rem !important;
-            width: 5rem !important;
-          }
-          .nav-toggle {
-            font-size: 1.8rem !important;
-          }
-          .nav-mobile-menu {
-            padding: 1rem 0 1.5rem !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .nav-logo {
-            height: 5rem !important;
-            width: 4rem !important;
-          }
-          .nav-toggle {
-            font-size: 1.5rem !important;
-          }
-        }
-      `}</style>
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+      padding: scrolled ? "0.85rem 2rem" : "1.2rem 2rem",
+      transition: "all 0.4s ease",
+      ...(scrolled || isOpen ? {
+        background: "rgba(8,7,13,0.88)",
+        backdropFilter: "blur(24px)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      } : {}),
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center", // Center navigation links
+          gap: "1rem",
+          position: "relative", // Needed for absolute positioning of children
+          height: "80px" // Ensure the header is tall enough for the larger logo
+        }}>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto" }} className="nav-container">
-        <div
-          style={{
+          {/* Logo Container - Absolute positioning keeps it from "affecting others" */}
+          <a href="/" style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            gap: "1rem",
-            position: "relative",
-            height: "80px",
-          }}
-        >
-          {/* Logo - absolute left */}
-          <a
-            href="/"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none",
-              position: "absolute",
-              left: 0,
-            }}
-          >
+            textDecoration: "none",
+            position: "absolute",
+            left: 0 // Anchors logo to the far left
+          }}>
             <img
               src="/logo2.png"
               alt="Sellix Logo"
-              className="nav-logo"
               style={{
-                height: "15rem",
-                width: "12rem",
+                height: "15rem", // Increased from 40px
+                width: "12rem", // Increased from 100px
                 objectFit: "contain",
-                filter: "drop-shadow(0 0 10px rgba(124,58,237,0.3))",
+                filter: "drop-shadow(0 0 10px rgba(124,58,237,0.3))"
               }}
             />
           </a>
 
-          {/* Desktop Navigation Links (hidden on mobile) */}
-          <div
-            className="hidden md:flex"
-            style={{ alignItems: "center", gap: 2 }}
-          >
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                style={{
-                  padding: "0.5rem 1rem",
-                  borderRadius: 999,
-                  fontFamily: "var(--font-outfit)",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.5)",
-                  textDecoration: "none",
-                  transition: "color 0.2s,background 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#fff";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.5)";
-                  e.currentTarget.style.background = "transparent";
-                }}
-              >
+          {/* Desktop Links - These will stay centered or spaced correctly */}
+          <div className="hidden md:flex" style={{ alignItems: "center", gap: 2 }}>
+            {links.map(l => (
+              <a key={l.href} href={l.href} style={{
+                padding: "0.5rem 1rem", borderRadius: 999,
+                fontFamily: "var(--font-outfit)", fontSize: "0.875rem", fontWeight: 500,
+                color: "rgba(255,255,255,0.5)", textDecoration: "none",
+                transition: "color 0.2s,background 0.2s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.05)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent"; }}>
                 {l.label}
               </a>
             ))}
           </div>
 
-          {/* Desktop Auth Buttons (hidden on mobile) */}
-          <div
-            className="hidden md:flex"
-            style={{
-              alignItems: "center",
-              gap: "0.75rem",
-              position: "absolute",
-              right: 0,
+          {/* Auth Buttons - Anchored to the right via absolute positioning */}
+          <div className="hidden md:flex" style={{
+            alignItems: "center",
+            gap: "0.75rem",
+            position: "absolute",
+            right: 0
+          }}>
+            <a href="/login" style={{
+              fontFamily: "var(--font-outfit)", fontSize: "0.875rem", fontWeight: 500,
+              color: "rgba(255,255,255,0.4)", textDecoration: "none", padding: "0.5rem 0.75rem",
+              transition: "color 0.2s",
             }}
-          >
-            <a
-              href="/login"
-              style={{
-                fontFamily: "var(--font-outfit)",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "rgba(255,255,255,0.4)",
-                textDecoration: "none",
-                padding: "0.5rem 0.75rem",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.4)")
-              }
-            >
+              onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}>
               Log in
             </a>
-            <button
-              style={{
-                background: "#22C55E",
-                color: "#08070D",
-                fontFamily: "var(--font-outfit)",
-                fontWeight: 800,
-                fontSize: "0.875rem",
-                padding: "0.6rem 1.4rem",
-                borderRadius: 999,
-                border: "none",
-                cursor: "pointer",
-                transition: "transform 0.2s,box-shadow 0.2s",
-              }}
-              onClick={() => (window.location.href = "/signup")}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow =
-                  "0 8px 28px rgba(34,197,94,0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "";
-                e.currentTarget.style.boxShadow = "";
-              }}
-            >
+            <button style={{
+              background: "#22C55E", color: "#08070D",
+              fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "0.875rem",
+              padding: "0.6rem 1.4rem", borderRadius: 999, border: "none", cursor: "pointer",
+              transition: "transform 0.2s,box-shadow 0.2s",
+            }}
+              onClick={() => window.location.href = '/signup'}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(34,197,94,0.4)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
               Start free →
             </button>
           </div>
 
-          {/* Mobile Toggle Button */}
-          <div
-            className="md:hidden"
-            style={{ position: "absolute", right: 0 }}
-          >
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="nav-toggle"
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#fff",
-                fontSize: "1.5rem",
-                cursor: "pointer",
-              }}
-            >
+          {/* Mobile Toggle */}
+          <div className="md:hidden flex items-center" style={{ position: "absolute", right: 0 }}>
+            <button onClick={() => setIsOpen(!isOpen)} style={{
+              background: "transparent", border: "none", color: "#fff", fontSize: "1.5rem", cursor: "pointer"
+            }}>
               {isOpen ? "✕" : "☰"}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Menu */}
         {isOpen && (
-          <div
-            className="md:hidden nav-mobile-menu"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              paddingTop: "1.5rem",
-              paddingBottom: "1rem",
-              borderTop: "1px solid rgba(255,255,255,0.06)",
-              marginTop: "1rem",
-            }}
-          >
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setIsOpen(false)}
-                style={{
-                  fontFamily: "var(--font-outfit)",
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  color: "rgba(255,255,255,0.8)",
-                  textDecoration: "none",
-                  padding: "0.5rem 0",
-                }}
-              >
+          <div className="md:hidden" style={{
+            display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "1.5rem", paddingBottom: "1rem",
+            borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem",
+          }}>
+            {links.map(l => (
+              <a key={l.href} href={l.href} onClick={() => setIsOpen(false)} style={{
+                fontFamily: "var(--font-outfit)", fontSize: "1rem", fontWeight: 600,
+                color: "rgba(255,255,255,0.8)", textDecoration: "none",
+                padding: "0.5rem 0",
+              }}>
                 {l.label}
               </a>
             ))}
-            <div
-              style={{
-                height: "1px",
-                background: "rgba(255,255,255,0.06)",
-                margin: "0.5rem 0",
-              }}
-            />
-            <a
-              href="/login"
-              onClick={() => setIsOpen(false)}
-              style={{
-                fontFamily: "var(--font-outfit)",
-                fontSize: "1rem",
-                fontWeight: 600,
-                color: "rgba(255,255,255,0.8)",
-                textDecoration: "none",
-                padding: "0.5rem 0",
-              }}
-            >
+            <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "0.5rem 0" }} />
+            <a href="/login" style={{
+              fontFamily: "var(--font-outfit)", fontSize: "1rem", fontWeight: 600,
+              color: "rgba(255,255,255,0.8)", textDecoration: "none", padding: "0.5rem 0",
+            }}>
               Log in
             </a>
-            <button
-              onClick={() => {
-                window.location.href = "/signup";
-                setIsOpen(false);
-              }}
-              style={{
-                background: "#22C55E",
-                color: "#08070D",
-                fontFamily: "var(--font-outfit)",
-                fontWeight: 800,
-                fontSize: "1rem",
-                padding: "0.8rem",
-                borderRadius: 999,
-                border: "none",
-                cursor: "pointer",
-                marginTop: "0.5rem",
-                width: "100%",
-              }}
-            >
+            <button onClick={() => window.location.href = '/signup'} style={{
+              background: "#22C55E", color: "#08070D",
+              fontFamily: "var(--font-outfit)", fontWeight: 800, fontSize: "1rem",
+              padding: "0.8rem", borderRadius: 999, border: "none", cursor: "pointer",
+              marginTop: "0.5rem", width: "100%",
+            }}>
               Start free →
             </button>
           </div>

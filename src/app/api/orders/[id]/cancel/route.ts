@@ -20,11 +20,9 @@ export async function PATCH(
         const body = await req.json();
         const { reason } = body;
 
-        // Call WA service
-        const rawUrl = process.env.WA_SERVICE_URL || "http://localhost:3001";
-        const waServiceUrl = rawUrl.replace(/\/+$/, '');
-        
-        const response = await fetch(`${waServiceUrl}/api/orders/${params.id}/cancel`, {
+        // Call backend service
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_SERVICE_URL || "http://localhost:3001";
+        const response = await fetch(`${backendUrl}/api/orders/${params.id}/cancel`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -33,25 +31,15 @@ export async function PATCH(
             body: JSON.stringify({ reason }),
         });
 
-        const text = await response.text();
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch (e) {
-            console.error(`Received non-JSON response from WA service (${response.status}):`, text.substring(0, 200));
-            return NextResponse.json(
-                { error: "Upstream service returned an invalid response", details: text.substring(0, 100) },
-                { status: response.status >= 400 ? response.status : 502 }
-            );
-        }
-
         if (!response.ok) {
+            const error = await response.json();
             return NextResponse.json(
-                { error: data.error || data.message || "Failed to cancel order" },
+                { error: error.message || "Failed to cancel order" },
                 { status: response.status }
             );
         }
 
+        const data = await response.json();
         return NextResponse.json(data);
     } catch (error: any) {
         console.error("Error cancelling order:", error);

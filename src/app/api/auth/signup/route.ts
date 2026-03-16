@@ -77,7 +77,6 @@ export async function POST(req: Request) {
                 name: user.name,
                 email: user.email,
                 businessId: business._id.toString(),
-                businessName: business.name,
                 role: user.role,
             },
         }, { status: 201 });

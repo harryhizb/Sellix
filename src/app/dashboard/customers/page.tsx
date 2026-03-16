@@ -69,7 +69,7 @@ export default function CustomersPage() {
                 </Button>
             </div>
 
-            <div className="grid gap-4 px-4 md:px-0 pb-8">
+            <div className="grid gap-4">
                 {filteredCustomers.map((customer) => (
                     <Card key={customer._id} className="border border-border shadow-sm hover:shadow-md transition-shadow">
                         <CardHeader className="pb-2">
