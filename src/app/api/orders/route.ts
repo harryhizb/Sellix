@@ -54,7 +54,7 @@ export async function GET(req: Request) {
         // Get query parameters
         const { searchParams } = new URL(req.url);
         const params = {
-            businessId: user.businessId,
+            businessId: user.businessId.toString(),
             status: searchParams.get("status") || undefined,
             type: searchParams.get("type") || undefined,
             startDate: searchParams.get("startDate") || undefined,
